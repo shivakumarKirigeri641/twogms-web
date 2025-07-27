@@ -1,0 +1,19 @@
+{
+  "name": "twogms-web",
+  "version": "1.0.0",
+  "description": "An web ui application for two wheeler garage management system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivakumarKirigeri641/twogms-web.git"
+  },
+  "author": "Shiva, Amruta, Suhas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shivakumarKirigeri641/twogms-web/issues"
+  },
+  "homepage": "https://github.com/shivakumarKirigeri641/twogms-web#readme"
+}
