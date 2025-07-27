@@ -1,11 +1,39 @@
-import React from "react";
+import Footer from "./components/general/Footer";
+import Statistics from "./components/garagespecific/Statistics";
+import GarageDashboard from "./components/garagespecific/GarageDashboard";
+import Error from "./components/Error";
 import "flowbite";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import appStore from "./store/appStore";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 const AppLayout = () => {
   return (
-    <div className="bg-sky-300">
-      <p>test</p>
-    </div>
+    <Provider store={appStore}>
+      <div className="bg-sky-300">
+        <Outlet />
+        <Footer />
+      </div>
+    </Provider>
   );
 };
-ReactDOM.createRoot(document.getElementById("root")).render(<AppLayout />);
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <AppLayout />,
+    children: [
+      {
+        path: "/twogms/dashboard",
+        element: <GarageDashboard />,
+      },
+      {
+        path: "/twogms/statistics",
+        element: <Statistics />,
+      },
+    ],
+    errorElement: <Error />,
+  },
+]);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <RouterProvider router={appRouter} />
+);
