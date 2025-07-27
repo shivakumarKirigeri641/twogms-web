@@ -3,7 +3,6 @@ import Home from "./components/general/Home";
 import Statistics from "./components/garagespecific/Statistics";
 import GarageDashboard from "./components/garagespecific/GarageDashboard";
 import Error from "./components/Error";
-import "flowbite";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import appStore from "./store/appStore";
