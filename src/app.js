@@ -1,4 +1,5 @@
 import Footer from "./components/general/Footer";
+import Home from "./components/general/Home";
 import Statistics from "./components/garagespecific/Statistics";
 import GarageDashboard from "./components/garagespecific/GarageDashboard";
 import Error from "./components/Error";
@@ -22,6 +23,10 @@ const appRouter = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
       {
         path: "/twogms/dashboard",
         element: <GarageDashboard />,
