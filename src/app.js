@@ -10,7 +10,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 const AppLayout = () => {
   return (
     <Provider store={appStore}>
-      <div className="bg-sky-300">
+      <div>
         <Outlet />
         <Footer />
       </div>
