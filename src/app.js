@@ -1,4 +1,5 @@
 import Footer from "./components/general/Footer";
+import "flowbite";
 import Home from "./components/general/Home";
 import Statistics from "./components/garagespecific/Statistics";
 import GarageDashboard from "./components/garagespecific/GarageDashboard";
