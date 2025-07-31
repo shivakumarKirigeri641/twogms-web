@@ -1,67 +1,80 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Menu from "../../svg/Menu";
 const Navbar = () => {
+  const navigate = useNavigate();
   const [showMenu, setshowMenu] = useState(true);
   return (
-    <div className="sticky w-full text-blue-800 p-1 flex justify-between z-20 items-center bg-gradient-to-b from-blue-100 to-blue-300">
-      <img
-        className="w-20 rounded-full"
-        src={require("../../../images/logo.png")}
-      ></img>
-      <div>
-        <div className="relative block md:hidden">
-          <Menu setshowMenu={setshowMenu} />
-          {showMenu && (
-            <ul className="absolute font-bold bg-slate-500 top-0 right-1 p-2 rounded text-nowrap text-gray-200 transition-all duration-500 ease-in">
-              <div className="text-right">X</div>
-              <li className="m-2">
-                <Link to="/">Home</Link>
-              </li>
-              <li className="m-2">
-                <Link to="/twogms/garagelogin">Garage</Link>
-              </li>
-              <li className="m-2">
-                <Link to="/">Customer</Link>
-              </li>
-              <li className="m-2">
-                <Link to="/">Services</Link>
-              </li>
-              <li className="m-2">
-                <Link to="/">Contact us</Link>
-              </li>
-              <li className="m-2">
-                <Link to="/">About</Link>
-              </li>
-            </ul>
-          )}
-          {showMenu && (
-            <div
-              className="fixed inset-0 right-1 top-0 w-full h-full z-30 bg-transparent"
-              onClick={() => {
-                setshowMenu(false);
-              }}
-            ></div>
-          )}
+    <div className="navbar bg-base-100 shadow-sm">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {" "}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />{" "}
+            </svg>
+          </div>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+          >
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <a>Garage</a>
+            </li>
+            <li>
+              <a>Customer</a>
+            </li>
+            <li>
+              <a>Services</a>
+            </li>
+            <li>
+              <a>Contact us</a>
+            </li>
+            <li>
+              <a>About us</a>
+            </li>
+          </ul>
         </div>
-        <ul className="hidden md:flex justify-around items-center font-bold">
-          <li className="mx-5">
+        <div className="btn btn-ghost text-xl">
+          <img
+            className="w-14 rounded-full my-2"
+            src={require("../../../images/logo.png")}
+          ></img>
+        </div>
+      </div>
+      <div className="navbar-end hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">
+          <li>
             <Link to="/">Home</Link>
           </li>
-          <li className="mx-5">
-            <Link to="/twogms/garagelogin">Garage</Link>
+          <li>
+            <a>Garage</a>
           </li>
-          <li className="mx-5">
-            <Link to="/">Customer</Link>
+          <li>
+            <a>Customer</a>
           </li>
-          <li className="mx-5">
-            <Link to="/">Services</Link>
+          <li>
+            <a>Services</a>
           </li>
-          <li className="mx-5">
-            <Link to="/">Contact us</Link>
+          <li>
+            <a>Contact us</a>
           </li>
-          <li className="mx-5">
-            <Link to="/">About</Link>
+          <li>
+            <a>About us</a>
           </li>
         </ul>
       </div>
