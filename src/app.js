@@ -7,6 +7,8 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import appStore from "./store/appStore";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
+import CustomerLoginOrRegister from "./components/general/CustomerLoginOrRegister";
+import GarageLoginOrRegister from "./components/general/GarageLoginOrRegister";
 const AppLayout = () => {
   return (
     <Provider store={appStore}>
@@ -33,6 +35,14 @@ const appRouter = createBrowserRouter([
       {
         path: "/twogms/statistics",
         element: <Statistics />,
+      },
+      {
+        path: "/twogms/garage/loginorregister",
+        element: <GarageLoginOrRegister />,
+      },
+      {
+        path: "/twogms/customer/loginorregister",
+        element: <CustomerLoginOrRegister />,
       },
     ],
     errorElement: <Error />,
