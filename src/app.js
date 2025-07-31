@@ -1,4 +1,5 @@
 import Footer from "./components/general/Footer";
+import GarageDashboard from "./components/garage/GarageDashboard";
 import Home from "./components/general/home/Home";
 import Error from "./components/Error";
 import ReactDOM from "react-dom/client";
@@ -30,6 +31,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/twogms/garageloginregister",
         element: <GarageLoginOrRegister />,
+      },
+      {
+        path: "/twogms/garage/garagedashboard",
+        element: <GarageDashboard />,
       },
     ],
     errorElement: <Error />,

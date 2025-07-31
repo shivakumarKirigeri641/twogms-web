@@ -1,13 +1,40 @@
+import axios from "axios";
 import { useState } from "react";
-
+import { SERVER } from "../../utils/constants";
+import { useDispatch } from "react-redux";
+import { addgarageCredentialDetails } from "../../store/slices/garageCredentialDetails";
+import { useNavigate } from "react-router";
 const GarageLoginOrRegister = () => {
   const [error, seterror] = useState("");
   const [isRegistration, setisRegistration] = useState(false);
   const [garageName, setgarageName] = useState("");
   const [ownerName, setownerName] = useState("");
   const [garageAddress, setgarageAddress] = useState("");
-  const [mobileNumber, setmobileNumber] = useState("");
-  const [password, setPassword] = useState("");
+  const [mobileNumber, setmobileNumber] = useState("9886122415");
+  const [password, setPassword] = useState("1234");
+  const [confirmpassword, setconfirmPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogin = async () => {
+    try {
+      seterror("");
+      const result = await axios.post(
+        SERVER + "/twogms/login",
+        { phoneNumber: mobileNumber, password: password },
+        { withCredentials: true }
+      );
+      dispatch(addgarageCredentialDetails(result?.data));
+      navigate("/twogms/garage/garagedashboard");
+    } catch (err) {
+      if (err.status === 401) {
+        seterror("Invalid credentails!");
+      }
+    }
+  };
+  const handleRegister = () => {
+    try {
+    } catch (err) {}
+  };
   return (
     <div className="w-full lg:w-[50%] mx-auto">
       <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4">
@@ -42,9 +69,13 @@ const GarageLoginOrRegister = () => {
                 required
                 placeholder="Garage name"
                 pattern="[A-Za-z][A-Za-z0-9\-]*"
-                minlength="3"
-                maxlength="30"
+                minLength="3"
+                maxLength="30"
                 title="Only letters, numbers or dash"
+                value={garageName}
+                onChange={(e) => {
+                  setgarageName(e.target.value);
+                }}
               />
             </label>
             <p className="validator-hint">
@@ -75,9 +106,13 @@ const GarageLoginOrRegister = () => {
                 required
                 placeholder="Owner name"
                 pattern="[A-Za-z]*"
-                minlength="3"
-                maxlength="30"
+                minLength="3"
+                maxLength="30"
                 title="Only letters"
+                value={ownerName}
+                onChange={(e) => {
+                  setownerName(e.target.value);
+                }}
               />
             </label>
             <p className="validator-hint">Must be only characters</p>
@@ -104,8 +139,12 @@ const GarageLoginOrRegister = () => {
                 type="text"
                 required
                 placeholder="Address"
-                minlength="3"
-                maxlength="300"
+                minLength="3"
+                maxLength="300"
+                value={garageAddress}
+                onChange={(e) => {
+                  setgarageAddress(e.target.value);
+                }}
               />
             </label>
             <p className="validator-hint">Must be only characters</p>
@@ -141,9 +180,13 @@ const GarageLoginOrRegister = () => {
               required
               placeholder="Mobile number"
               pattern="[0-9]*"
-              minlength="10"
-              maxlength="10"
+              minLength="10"
+              maxLength="10"
               title="Only numbers"
+              value={mobileNumber}
+              onChange={(e) => {
+                setmobileNumber(e.target.value);
+              }}
             />
           </label>
           <p className="validator-hint">Must be only numbers please</p>
@@ -172,9 +215,13 @@ const GarageLoginOrRegister = () => {
               required
               placeholder="Password"
               pattern="[0-9]*"
-              minlength="5"
-              maxlength="50"
+              minLength="5"
+              maxLength="50"
               title="Passwords only"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
           </label>
           <p className="validator-hint">
@@ -205,9 +252,13 @@ const GarageLoginOrRegister = () => {
                   required
                   placeholder="Repeat Password"
                   pattern="[0-9]*"
-                  minlength="5"
-                  maxlength="50"
+                  minLength="5"
+                  maxLength="50"
                   title="Passwords only"
+                  value={confirmpassword}
+                  onChange={(e) => {
+                    setconfirmPassword(e.target.value);
+                  }}
                 />
               </label>
               <p className="validator-hint">Passwords not matching!</p>
@@ -252,10 +303,17 @@ const GarageLoginOrRegister = () => {
             <button className="btn btn-primary mt-4">Register</button>
           )}
           {!isRegistration && (
-            <button className="btn btn-primary mt-4">Login</button>
+            <button
+              className="btn btn-primary mt-4"
+              onClick={() => {
+                handleLogin();
+              }}
+            >
+              Login
+            </button>
           )}
           {"" !== error && (
-            <label className="text-red-500 font-bold text-lg">Error</label>
+            <label className="text-red-500 font-bold text-lg">{error}</label>
           )}
         </fieldset>
       </fieldset>
