@@ -23,7 +23,7 @@ const GarageLoginOrRegister = () => {
         { phoneNumber: mobileNumber, password: password },
         { withCredentials: true }
       );
-      dispatch(addgarageCredentialDetails(result?.data));
+      dispatch(addgarageCredentialDetails(result?.data?.message));
       navigate("/twogms/garage/garagedashboard");
     } catch (err) {
       if (err.status === 401) {

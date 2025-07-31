@@ -103,6 +103,12 @@ const Navbar = () => {
           ></img>
         </div>
       </div>
+      {garagecredentials && (
+        <div className="navbar-center">
+          <p>Welcome, </p>
+          <p>{garagecredentials?.ownerName}</p>
+        </div>
+      )}
       <div className="navbar-end hidden lg:flex">
         {garagecredentials && (
           <ul className="menu menu-horizontal px-1">
