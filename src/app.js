@@ -1,7 +1,9 @@
 import Footer from "./components/general/Footer";
-import Home from "./components/general/Home";
+import Home from "./components/general/home/Home";
+import GarageLogin from "./components/garage/GarageLogin";
 import Error from "./components/Error";
 import ReactDOM from "react-dom/client";
+import Navbar from "./components/general/home/Navbar";
 import { Provider } from "react-redux";
 import appStore from "./store/appStore";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
@@ -9,6 +11,7 @@ const AppLayout = () => {
   return (
     <Provider store={appStore}>
       <div>
+        <Navbar />
         <Outlet />
         <Footer />
       </div>
@@ -23,6 +26,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/twogms/garagelogin",
+        element: <GarageLogin />,
       },
     ],
     errorElement: <Error />,
