@@ -46,9 +46,14 @@ const ServicingVehicleDetails = () => {
                     <td>{x?.customerInfo?.customerName}</td>
                     <td>{x?.customerInfo?.primaryMobileNumber}</td>
                     <td>
-                      <button className="bg-blue-400 text-black rounded-full px-3 cursor-pointer">
-                        Edit
-                      </button>
+                      <div className="flex">
+                        <button className="bg-blue-400 text-black rounded-full px-3 cursor-pointer">
+                          Edit
+                        </button>
+                        <button className="bg-blue-400 text-black rounded-full cursor-pointer mx-1 p-1">
+                          Export
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -82,9 +87,14 @@ const ServicingVehicleDetails = () => {
                       </div>
                     </td>
                     <td>
-                      <button className="bg-blue-400 text-black rounded-full px-3 cursor-pointer">
-                        Edit
-                      </button>
+                      <div className="flex">
+                        <button className="bg-blue-400 text-black rounded-full px-3 cursor-pointer">
+                          Edit
+                        </button>
+                        <button className="bg-blue-400 text-black rounded-full cursor-pointer mx-1 p-1">
+                          Export
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
