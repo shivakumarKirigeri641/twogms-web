@@ -5,6 +5,8 @@ import WhatIsTwoGms from "./WhatIsTwoGms";
 import GarageBenefits from "./GarageBenefits";
 import CustomerBenefits from "./CustomerBenefits";
 import { removegarageCredentialDetails } from "../../../store/slices/garageCredentialDetails";
+import { removeservicedVehicles } from "../../../store/slices/servicedVehiclesSlice";
+import { removeservicingVehicles } from "../../../store/slices/servicingVehiclesSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 const Home = () => {
@@ -12,6 +14,8 @@ const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     console.log("loading home pate");
+    dispatch(removeservicedVehicles());
+    dispatch(removeservicingVehicles());
     dispatch(removegarageCredentialDetails());
   }, []);
   return (
