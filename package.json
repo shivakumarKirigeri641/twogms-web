@@ -4,7 +4,9 @@
   "description": "An web ui application for two wheeler garage management system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel src/index.html",
+    "postinstall": "flowbite-react register"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,21 @@
   "bugs": {
     "url": "https://github.com/shivakumarKirigeri641/twogms-web/issues"
   },
-  "homepage": "https://github.com/shivakumarKirigeri641/twogms-web#readme"
+  "homepage": "https://github.com/shivakumarKirigeri641/twogms-web#readme",
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
+    "@tailwindcss/postcss": "^4.1.11",
+    "axios": "^1.11.0",
+    "daisyui": "^5.0.50",
+    "parcel": "^2.13.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.7.1",
+    "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "process": "^0.11.10"
+  }
 }
