@@ -60,7 +60,7 @@ const ServicingVehicleDetails = () => {
               <thead></thead>
               <tbody>
                 {servicingVehicles?.map((x, index) => (
-                  <tr className="border-b border-slate-400">
+                  <tr className="border-b border-slate-400" key={index}>
                     <td></td>
                     <td>{index + 1}</td>
                     <td>

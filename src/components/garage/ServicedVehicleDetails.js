@@ -9,7 +9,7 @@ const ServicedVehicleDetails = () => {
   const [searchText, setsearchText] = useState("");
   const dispatch = useDispatch();
   const servicedVehicles = useSelector((store) => store.servicedVehicles);
-  const filteredservicedVehicles = servicedVehicles.filter(
+  const filteredservicedVehicles = servicedVehicles?.filter(
     (x) =>
       x?.vehicleNumber.toLowerCase().includes(searchText.toLowerCase()) ||
       x?.vehicleInfo.variantName

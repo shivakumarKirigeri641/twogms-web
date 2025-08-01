@@ -4,6 +4,8 @@ import Menu from "../../svg/Menu";
 import { useDispatch, useSelector } from "react-redux";
 import { SERVER } from "../../../utils/constants";
 import { removegarageCredentialDetails } from "../../../store/slices/garageCredentialDetails";
+import { removeservicingVehicles } from "../../../store/slices/servicingVehiclesSlice";
+import { removeservicedVehicles } from "../../../store/slices/servicedVehiclesSlice";
 import axios from "axios";
 const Navbar = () => {
   const garagecredentials = useSelector(
@@ -19,6 +21,8 @@ const Navbar = () => {
       { withCredentials: true }
     );
     dispatch(removegarageCredentialDetails());
+    dispatch(removeservicedVehicles());
+    dispatch(removeservicingVehicles());
     navigate("/");
   };
   return (
