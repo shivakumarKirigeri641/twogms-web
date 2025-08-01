@@ -7,6 +7,7 @@ import GarageLoginOrRegister from "./components/garage/GarageLoginOrRegister";
 import Navbar from "./components/general/home/Navbar";
 import { Provider } from "react-redux";
 import appStore from "./store/appStore";
+import CurrentVehicleInService from "./components/garage/currentvehicle/CurrentVehicleInService";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 const AppLayout = () => {
   return (
@@ -35,6 +36,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/twogms/garage/garagedashboard",
         element: <GarageDashboard />,
+      },
+      {
+        path: "/twogms/garage/currentvehicleinservice/:vehicleId",
+        element: <CurrentVehicleInService />,
       },
     ],
     errorElement: <Error />,

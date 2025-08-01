@@ -4,8 +4,10 @@ import Skeleton from "../customcomponents/Skeleton";
 import { SERVER } from "../../utils/constants";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const ServicedVehicleDetails = () => {
+  const navigate = useNavigate();
   const [searchText, setsearchText] = useState("");
   const dispatch = useDispatch();
   const servicedVehicles = useSelector((store) => store.servicedVehicles);
@@ -83,9 +85,22 @@ const ServicedVehicleDetails = () => {
                       <td>{x?.customerInfo?.customerName}</td>
                       <td>{x?.customerInfo?.primaryMobileNumber}</td>
                       <td>
-                        <button className="bg-blue-400 text-black rounded-full px-3 cursor-pointer">
-                          Edit
-                        </button>
+                        <div className="flex">
+                          <button
+                            className="bg-blue-400 text-black rounded-full px-3 cursor-pointer"
+                            onClick={() => {
+                              navigate(
+                                "/twogms/garage/currentvehicleinservice/" +
+                                  x?.vehicleInfo?._id
+                              );
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <button className="bg-blue-400 text-black rounded-full cursor-pointer mx-1 p-1">
+                            Export
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -127,9 +142,20 @@ const ServicedVehicleDetails = () => {
                         </div>
                       </td>
                       <td>
-                        <div className="tooltip tooltip-left" data-tip="hello">
-                          <button className="bg-blue-400 text-black rounded-full px-3 cursor-pointer">
+                        <div className="flex">
+                          <button
+                            className="bg-blue-400 text-black rounded-full px-3 cursor-pointer"
+                            onClick={() => {
+                              navigate(
+                                "/twogms/garage/currentvehicleinservice/" +
+                                  x?.vehicleInfo?._id
+                              );
+                            }}
+                          >
                             Edit
+                          </button>
+                          <button className="bg-blue-400 text-black rounded-full cursor-pointer mx-1 p-1">
+                            Export
                           </button>
                         </div>
                       </td>
