@@ -28,7 +28,7 @@ const GarageDashboard = () => {
           Here are your vehicles which are under service and already serviced
           vehicles...
         </p>
-        <div className="lg:flex justify-between">
+        <div className="w-full">
           <ServicingVehicleDetils />
           <ServicedVehicleDetails />
         </div>
