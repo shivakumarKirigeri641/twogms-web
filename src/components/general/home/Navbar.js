@@ -106,7 +106,9 @@ const Navbar = () => {
       {garagecredentials && (
         <div className="navbar-center">
           <p>Welcome, </p>
-          <p>{garagecredentials?.ownerName}</p>
+          <p className="text-lg font-bold px-2">
+            {garagecredentials?.ownerName}🙂
+          </p>
         </div>
       )}
       <div className="navbar-end hidden lg:flex">
