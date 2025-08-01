@@ -77,7 +77,7 @@ const ServicedVehicleDetails = () => {
                 <thead></thead>
                 <tbody>
                   {filteredservicedVehicles?.map((x, index) => (
-                    <tr className="border-b border-slate-400">
+                    <tr className="border-b border-slate-400" key={index}>
                       <td></td>
                       <td>{index + 1}</td>
                       <td>{x?.vehicleNumber}</td>
@@ -120,7 +120,7 @@ const ServicedVehicleDetails = () => {
                 <thead></thead>
                 <tbody>
                   {filteredservicedVehicles?.map((x, index) => (
-                    <tr className="border-b border-slate-400">
+                    <tr className="border-b border-slate-400" key={index}>
                       <td></td>
                       <td>{index + 1}</td>
                       <td>
