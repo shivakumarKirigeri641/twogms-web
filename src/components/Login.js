@@ -1,10 +1,7 @@
-import React from "react";
-
 const Login = () => {
   return (
-    <div>
-      <p>test</p>
-      <button className="bg-pink-300">hello</button>
+    <div className="relative h-screen">
+      <div>test</div>
     </div>
   );
 };

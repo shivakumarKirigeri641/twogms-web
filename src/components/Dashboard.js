@@ -1,6 +1,6 @@
 const Dashboard = () => {
   return (
-    <div className="bg-slate-300">
+    <div>
       <p>test</p>
     </div>
   );
