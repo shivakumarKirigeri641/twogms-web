@@ -2,19 +2,21 @@ import "flyonui/flyonui";
 import ReactDOM from "react-dom/client";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
+import Error from "./components/Error";
 import About from "./components/About";
 import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
-import { useEffect } from "react";
+import { Provider, useSelector } from "react-redux";
+import appStore from "./store/appStore";
 const AppLayout = () => {
   return (
-    <div>
+    <Provider store={appStore}>
       <Navbar />
       <Outlet />
       <Footer />
-    </div>
+    </Provider>
   );
 };
 const appRouter = createBrowserRouter([

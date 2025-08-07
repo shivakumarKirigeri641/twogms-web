@@ -1,7 +1,10 @@
-import React from "react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  return (
+  const garageCredentials = useSelector(
+    (store) => store.garageLoginCredentials
+  );
+  return garageCredentials ? (
     <nav class="navbar rounded-box shadow-base-300/20 shadow-sm">
       <div class="w-full md:flex md:items-center md:gap-2">
         <div class="flex items-center justify-between">
@@ -44,6 +47,8 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+  ) : (
+    <></>
   );
 };
 
