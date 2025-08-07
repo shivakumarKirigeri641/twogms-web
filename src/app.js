@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+import "flyonui/flyonui";
 import ReactDOM from "react-dom/client";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
