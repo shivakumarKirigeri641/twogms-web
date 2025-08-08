@@ -18,29 +18,32 @@ const Login = () => {
               src={require("../images/logo.png")}
             ></img>
           </div>
-          <div class="card m-2">
+          <div class="card m-3 mb-5">
             <div class="card-body text-center">
               <h5 class="card-title mb-2.5 text-center">Welcome to TWOGMS</h5>
               <p>
                 All your two-wheeler service needs—managed online, anytime,
                 anywhere.
               </p>
-              <p className="my-5 text-left underline underline-offset-2 font-bold text-blue-300 cursor-pointer">
+              <p className="my-5 text-left underline underline-offset-2 font-bold text-blue-800 cursor-pointer italic">
                 why TWOGMMS?
               </p>
             </div>
           </div>
-          <div class="input-floating w-full px-2">
+          <div class="input-floating w-full px-3">
             <input
               type="text"
               placeholder="Enter your mobile number"
               className="input"
               id="floatingInput"
             />
-            <label className="input-floating-label  px-3" for="floatingInput">
+            <label
+              className="input-floating-label p-2 bg-transparent"
+              for="floatingInput"
+            >
               Mobile number
             </label>
-            <button class="btn btn-accent w-full my-2">Get OTP</button>
+            <button class="btn btn-primary w-full my-2">Get OTP</button>
             {showNotRegisteredError && (
               <div class="alert alert-error" role="alert">
                 Oops! It seems you have entered an invalid mobile number.
