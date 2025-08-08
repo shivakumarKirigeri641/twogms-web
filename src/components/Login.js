@@ -34,42 +34,42 @@ const Login = () => {
         </div>
         <div className="text-yellow-100">
           {/**sign in field */}
-          <div class="input-floating w-full px-2 mt-5">
+          <div className="input-floating w-full px-2 mt-5">
             <input
               type="text"
               placeholder="Enter 10-digit mobile number"
               required
-              class="input"
+              className="input"
               id="floatingInput"
             />
-            <label class="input-floating-label" for="floatingInput">
+            <label className="input-floating-label" for="floatingInput">
               Mobile number
             </label>
           </div>
           {/**sign in field */}
           {/**get otp */}
           <div className="px-2">
-            <button class="btn btn-accent w-full my-2">Get OTP</button>
+            <button className="btn btn-accent w-full my-2">Get OTP</button>
           </div>
           {/**get otp */}
           <div>
             {/**enter otp */}
-            <div class="input-floating w-full px-2 mt-5">
+            <div className="input-floating w-full px-2 mt-5">
               <input
                 type="text"
                 placeholder="Enter 6-digit otp recieved"
                 required
-                class="input"
+                className="input"
                 id="floatingInput"
               />
-              <label class="input-floating-label" for="floatingInput">
+              <label className="input-floating-label" for="floatingInput">
                 OTP
               </label>
             </div>
             {/**enter otp */}
             {/**login */}
             <div className="px-2">
-              <button class="btn btn-accent w-full my-2">Sign In</button>
+              <button className="btn btn-accent w-full my-2">Sign In</button>
             </div>
           </div>
           {/**login */}
