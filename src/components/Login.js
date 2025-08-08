@@ -1,18 +1,33 @@
 import axios from "axios";
+import { SERVER } from "../utils/constants";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addgarageLoginCredentials } from "../store/slices/garageLoginCredentialsSlice";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const [showOtp, setshowOtp] = useState(false);
+  const [phoneNumber, setphoneNumber] = useState("9886122415");
+  const [password, setpassword] = useState("Shiva@123");
   const [showInvalidOtpError, setshowInvalidOtpError] = useState(false);
   const [showNotRegisteredError, setshowNotRegisteredError] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
+      const result = await axios.post(SERVER + "/twogms/login", {
+        phoneNumber,
+        password,
+      });
+      console.log(result?.data?.data);
+      dispatch(addgarageLoginCredentials(result?.data?.data));
+      navigate("/");
     } catch (err) {
       setshowInvalidOtpError(err.message);
     }
   };
   return (
-    <div className="relative h-screen lg:w-[40%] lg:mx-auto bg-gradient-to-b from-[#245F7F] to-[#78CEB4]">
+    <div className="relative h-screen lg:w-[25%] lg:mx-auto bg-gradient-to-b from-[#7d8d96] to-[#1a2220] rounded-2xl my-5">
       <img
         className="hidden lg:block fixed w-full h-full inset-0 -z-10"
         src={require("../images/login_background.jpg")}
@@ -49,7 +64,14 @@ const Login = () => {
           {/**sign in field */}
           {/**get otp */}
           <div className="px-2">
-            <button className="btn btn-accent w-full my-2">Get OTP</button>
+            <button
+              className="btn btn-accent w-full my-2"
+              onClick={() => {
+                handleLogin();
+              }}
+            >
+              Get OTP
+            </button>
           </div>
           {/**get otp */}
           <div>
