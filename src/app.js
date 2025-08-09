@@ -9,12 +9,15 @@ import Footer from "./components/Footer";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { Provider, useSelector } from "react-redux";
 import appStore from "./store/appStore";
+import { Provider } from "./components/ui/provider.jsx";
 const AppLayout = () => {
   return (
-    <Provider store={appStore}>
-      <Navbar />
-      <Outlet />
-      <Footer />
+    <Provider>
+      <Provider store={appStore}>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </Provider>
     </Provider>
   );
 };
