@@ -13,7 +13,7 @@ const Dashboard = () => {
     }
   }, []);
   return (
-    <div className="relative h-screen lg:w-[40%] lg:mx-auto bg-gradient-to-b from-[#7d8d96] to-[#1a2220]">
+    <div>
       <p>test</p>
     </div>
   );

@@ -1,11 +1,15 @@
 {
+  "alias": {
+    "react": "./node_modules/react",
+    "react-dom": "./node_modules/react-dom"
+  },
   "name": "twogms-web",
   "version": "1.0.0",
   "description": "UI for twogms services for garages",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "rmdir /s /q .parcel-cache && parcel src/index.html"
+    "start": "parcel src/index.html"
   },
   "repository": {
     "type": "git",
@@ -19,18 +23,15 @@
   "homepage": "https://github.com/shivakumarKirigeri641/twogms-web#readme",
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
-    "@tailwindcss/postcss": "^4.1.11",
     "axios": "^1.11.0",
-    "flyonui": "^2.4.0",
     "parcel": "^2.13.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-redux": "^9.2.0",
-    "react-router": "^7.7.1",
-    "tailwindcss": "^4.1.11"
+    "react-router": "^7.7.1"
   },
   "devDependencies": {
-    "@iconify/tailwind4": "^1.0.6",
+    "@tailwindcss/postcss": "^4.1.11",
     "buffer": "^6.0.3",
     "process": "^0.11.10"
   }
