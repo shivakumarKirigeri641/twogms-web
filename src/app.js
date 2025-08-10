@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { Provider, useSelector } from "react-redux";
 import appStore from "./store/appStore";
+import * as bootstrap from "bootstrap";
 const AppLayout = () => {
   return (
     <Provider store={appStore}>
