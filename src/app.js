@@ -9,7 +9,10 @@ import Footer from "./components/Footer";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { Provider, useSelector } from "react-redux";
 import appStore from "./store/appStore";
+import axios from "axios";
 const AppLayout = () => {
+  axios.defaults.baseURL = "http://192.168.10.34:7777";
+  axios.defaults.withCredentials = true;
   return (
     <Provider store={appStore}>
       <Navbar />

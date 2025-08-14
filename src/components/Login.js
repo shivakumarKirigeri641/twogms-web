@@ -16,15 +16,12 @@ const Login = () => {
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      console.log("triggering");
-      const result = await axios.post(
-        SERVER + "/twogms/login",
-        {
-          phoneNumber,
-          password,
-        },
-        { withCredentials: true }
-      );
+      console.log(axios.defaults.baseURL);
+      console.log(axios.defaults.withCredentials);
+      const result = await axios.post(SERVER + "/twogms/login", {
+        phoneNumber,
+        password,
+      });
       console.log(result?.data?.data);
       dispatch(addgarageLoginCredentials(result?.data?.data));
       navigate("/");

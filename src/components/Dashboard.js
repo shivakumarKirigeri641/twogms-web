@@ -16,8 +16,7 @@ const Dashboard = () => {
       } else {
         const fetchServicingVehicles = async () => {
           const servicingvehicles = await axios.get(
-            SERVER + "/servicing-vehicles",
-            { withCredentials: true }
+            SERVER + "/servicing-vehicles"
           );
           console.log(servicingvehicles?.data);
         };
