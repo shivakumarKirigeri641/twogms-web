@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { removegarageLoginCredentials } from "../store/slices/garageLoginCredentialsSlice";
 import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ const Navbar = () => {
     (store) => store.garageLoginCredentials
   );
   const handleLogout = () => {
+    setIsOpen(false);
     dispatch(removeservicingVehicles());
     dispatch(removegarageLoginCredentials());
     navigate("/twogms/login");
@@ -96,40 +97,51 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-2 bg-white">
+        <div
+          className="md:hidden fixed inset-0 -z-10 w-full h-full bg-slate-300 opacity-50"
+          onClick={() => {
+            setIsOpen(false);
+          }}
+        ></div>
+      )}
+
+      {isOpen && (
+        <div className="md:hidden px-4 pb-4 space-y-2 bg-slate-300 z-20">
           <ul>
-            <li>
+            <li className="py-2 hover:font-semibold cursor-pointer">
               <Link to="#" className="text-gray-700 hover:text-blue-600">
                 Servicing vehicles
               </Link>
             </li>
-            <li>
+            <li className="py-2 hover:font-semibold cursor-pointer">
               <Link to="#" className="text-gray-700 hover:text-blue-600">
                 Serviced vehicles
               </Link>
             </li>
-            <li>
+            <li className="py-2 hover:font-semibold cursor-pointer">
               <Link to="#" className="text-gray-700 hover:text-blue-600">
                 Add vehicle
               </Link>
             </li>
-            <li>
+            <li className="py-2 hover:font-semibold cursor-pointer">
               <Link to="#" className="text-gray-700 hover:text-blue-600">
                 My job
               </Link>
             </li>
-            <li>
+            <li className="py-2 hover:font-semibold cursor-pointer">
               <Link to="#" className="text-gray-700 hover:text-blue-600">
                 Profile
               </Link>
             </li>
-            <li>
+            <li className="py-2 hover:font-semibold cursor-pointer border border-slate-400 p-1 rounded-full text-center bg-blue-600 font-bold">
               <button
-                className="text-gray-700 hover:text-blue-600"
+                className="text-white"
                 onClick={() => {
                   handleLogout();
                 }}
-              ></button>
+              >
+                Logout
+              </button>
             </li>
           </ul>
         </div>
