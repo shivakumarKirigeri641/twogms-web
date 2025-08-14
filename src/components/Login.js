@@ -30,7 +30,7 @@ const Login = () => {
 
   const handleOpen = (value) => setOpen(open === value ? 0 : value);
   return (
-    <div>
+    <div className="bg-slate-400">
       <p>test</p>
     </div>
   );
