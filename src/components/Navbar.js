@@ -1,12 +1,20 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router";
-
+import { removegarageLoginCredentials } from "../store/slices/garageLoginCredentialsSlice";
+import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router";
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const garageCredentials = useSelector(
     (store) => store.garageLoginCredentials
   );
+  const handleLogout = () => {
+    dispatch(removeservicingVehicles());
+    dispatch(removegarageLoginCredentials());
+    navigate("/twogms/login");
+  };
   return garageCredentials ? (
     <nav className="bg-white shadow sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,9 +44,14 @@ const Navbar = () => {
             <Link to="#" className="text-gray-700 hover:text-blue-600">
               Profile
             </Link>
-            <Link to="#" className="text-gray-700 hover:text-blue-600">
+            <button
+              className="text-gray-700 hover:text-blue-600"
+              onClick={() => {
+                handleLogout();
+              }}
+            >
               Logout
-            </Link>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -111,9 +124,12 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="#" className="text-gray-700 hover:text-blue-600">
-                Logout
-              </Link>
+              <button
+                className="text-gray-700 hover:text-blue-600"
+                onClick={() => {
+                  handleLogout();
+                }}
+              ></button>
             </li>
           </ul>
         </div>
