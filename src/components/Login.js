@@ -7,8 +7,8 @@ import { useNavigate } from "react-router";
 
 const Login = () => {
   const [showOtp, setshowOtp] = useState(false);
-  const [phoneNumber, setphoneNumber] = useState("9886122415");
-  const [password, setpassword] = useState("Shiva@123");
+  const [phoneNumber, setphoneNumber] = useState("");
+  const [password, setpassword] = useState("");
   const [showInvalidOtpError, setshowInvalidOtpError] = useState(false);
   const [showNotRegisteredError, setshowNotRegisteredError] = useState(false);
   const [mobile, setMobile] = useState("");
@@ -16,8 +16,12 @@ const Login = () => {
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      console.log(axios.defaults.baseURL);
-      console.log(axios.defaults.withCredentials);
+      if (!phoneNumber || 10 !== phoneNumber?.length) {
+        throw new Error("Invalid mobile number!");
+      }
+      if (!password) {
+        throw new Error("Invalid password!");
+      }
       const result = await axios.post(SERVER + "/twogms/login", {
         phoneNumber,
         password,
@@ -26,8 +30,11 @@ const Login = () => {
       dispatch(addgarageLoginCredentials(result?.data?.data));
       navigate("/");
     } catch (err) {
-      console.log("error");
-      setshowInvalidOtpError(err.message);
+      if (401 === err.status) {
+        setshowInvalidOtpError("Mobile number not registered!");
+      } else {
+        setshowInvalidOtpError(err.message);
+      }
     }
   };
 
@@ -67,6 +74,19 @@ const Login = () => {
               required
             />
           </div>
+          <div>
+            <label className="block text-gray-700 text-sm font-medium mb-1">
+              OTP (temp_login password)
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setpassword(e.target.value)}
+              placeholder="Enter OTP"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+              required
+            />
+          </div>
 
           <button
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
@@ -74,8 +94,11 @@ const Login = () => {
               handleLogin();
             }}
           >
-            Send OTP
+            temp_Login
           </button>
+          <p className="text-red-500 font-semibold italic">
+            {showInvalidOtpError}
+          </p>
         </div>
       </div>
     </div>
