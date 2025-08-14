@@ -1,3 +1,5 @@
+import axios from "axios";
+import { SERVER } from "../utils/constants";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -8,8 +10,22 @@ const Dashboard = () => {
     (store) => store.garageLoginCredentials
   );
   useEffect(() => {
-    if (!garageLoginCredentials) {
-      navigate("/twogms/login");
+    try {
+      if (!garageLoginCredentials) {
+        navigate("/twogms/login");
+      } else {
+        const fetchServicingVehicles = async () => {
+          const servicingvehicles = await axios.get(
+            SERVER + "/servicing-vehicles",
+            { withCredentials: true }
+          );
+          console.log(servicingvehicles?.data);
+        };
+        fetchServicingVehicles();
+      }
+    } catch (err) {
+      console.log("test");
+      navigate("/");
     }
   }, []);
   return (
