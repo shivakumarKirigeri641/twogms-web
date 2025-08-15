@@ -54,6 +54,7 @@ const Dashboard = () => {
             </button>
           </div>
           <div>
+            {/**desktop */}
             <ul className="hidden lg:block">
               {currservicingVehicles?.map((x, index) => (
                 <li
@@ -107,6 +108,8 @@ const Dashboard = () => {
                 </li>
               ))}
             </ul>
+            {/**desktop */}
+            {/**mobile */}
             <ul className="block lg:hidden">
               {currservicingVehicles?.map((x, index) => (
                 <li
@@ -164,6 +167,7 @@ const Dashboard = () => {
                 </li>
               ))}
             </ul>
+            {/**mobile */}
           </div>
         </div>
       )}
