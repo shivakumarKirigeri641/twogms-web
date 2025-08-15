@@ -3,6 +3,7 @@ import { removegarageLoginCredentials } from "../store/slices/garageLoginCredent
 import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
+import Welcomebar from "./Welcomebar";
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -330,6 +331,7 @@ const Navbar = () => {
           </ul>
         </div>
       )}
+      <Welcomebar />
     </nav>
   ) : (
     <></>

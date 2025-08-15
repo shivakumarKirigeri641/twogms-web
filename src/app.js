@@ -18,7 +18,6 @@ const AppLayout = () => {
   return (
     <Provider store={appStore}>
       <Navbar />
-      <Welcomebar />
       <Outlet />
       <Footer />
     </Provider>

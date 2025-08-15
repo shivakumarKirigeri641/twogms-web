@@ -1,14 +1,17 @@
 import axios from "axios";
 import { SERVER } from "../utils/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addgarageLoginCredentials } from "../store/slices/garageLoginCredentialsSlice";
+import {
+  addgarageLoginCredentials,
+  removegarageLoginCredentials,
+} from "../store/slices/garageLoginCredentialsSlice";
 import { useNavigate } from "react-router";
 
 const Login = () => {
   const [showOtp, setshowOtp] = useState(false);
-  const [phoneNumber, setphoneNumber] = useState("");
-  const [password, setpassword] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("9886122415");
+  const [password, setpassword] = useState("Shiva@123");
   const [showInvalidOtpError, setshowInvalidOtpError] = useState(false);
   const [showNotRegisteredError, setshowNotRegisteredError] = useState(false);
   const [mobile, setMobile] = useState("");
@@ -37,7 +40,9 @@ const Login = () => {
       }
     }
   };
-
+  useEffect(() => {
+    dispatch(removegarageLoginCredentials());
+  }, []);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
