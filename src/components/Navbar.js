@@ -3,6 +3,8 @@ import { removegarageLoginCredentials } from "../store/slices/garageLoginCredent
 import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
+import { removeservicedVehicles } from "../store/slices/servicedVehiclesSlice";
+import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 import Welcomebar from "./Welcomebar";
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -17,6 +19,8 @@ const Navbar = () => {
     setIsDropdownOpen(false);
     dispatch(removeservicingVehicles());
     dispatch(removegarageLoginCredentials());
+    dispatch(removeservicedVehicles());
+    dispatch(removeservicingVehicles());
     navigate("/twogms/login");
   };
   return garageCredentials ? (

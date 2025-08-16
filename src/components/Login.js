@@ -6,6 +6,8 @@ import {
   addgarageLoginCredentials,
   removegarageLoginCredentials,
 } from "../store/slices/garageLoginCredentialsSlice";
+import { removeservicedVehicles } from "../store/slices/servicedVehiclesSlice";
+import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 import { useNavigate } from "react-router";
 
 const Login = () => {
@@ -42,6 +44,8 @@ const Login = () => {
   };
   useEffect(() => {
     dispatch(removegarageLoginCredentials());
+    dispatch(removeservicedVehicles());
+    dispatch(removeservicingVehicles());
   }, []);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
