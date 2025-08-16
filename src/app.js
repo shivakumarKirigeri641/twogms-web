@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom/client";
+import AddVehicle from "./components/AddVehicle";
 import ServicedVehicles from "./components/ServicedVehicles";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
@@ -44,6 +45,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/serviced-vehicles",
         element: <ServicedVehicles />,
+      },
+      {
+        path: "/twogms/add-vehicle",
+        element: <AddVehicle />,
       },
     ],
     errorElement: <Error />,

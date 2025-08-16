@@ -43,7 +43,7 @@ const Navbar = () => {
               <Link to="/serviced-vehicles" className="hover:text-gray-200">
                 Serviced vehicles
               </Link>
-              <Link to="/" className="hover:text-gray-200">
+              <Link to="/twogms/add-vehicle" className="hover:text-gray-200">
                 Add vehicle
               </Link>
               <Link to="/" className="hover:text-gray-200">
@@ -133,7 +133,7 @@ const Navbar = () => {
               <Link to="/serviced-vehicles" className="hover:text-gray-200">
                 Serviced vehicles
               </Link>
-              <Link to="/" className="hover:text-gray-200">
+              <Link to="/twogms/add-vehicle" className="hover:text-gray-200">
                 Add vehicle
               </Link>
               <Link to="/" className="hover:text-gray-200">
@@ -200,7 +200,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
+              <Link to="/twogms/add-vehicle" className="hover:text-gray-200">
                 Add vehicle
               </Link>
             </li>
@@ -287,52 +287,6 @@ const Navbar = () => {
           >
             Logout
           </button>
-        </div>
-      )}
-      {isMenuOpen && false === garageCredentials?.isGarageOwner && (
-        <div className="md:hidden bg-blue-700">
-          <ul>
-            <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
-                Servicing vehicles
-              </Link>
-            </li>
-            <li className="p-2.5 hover:font-bold">
-              <Link to="/serviced-vehicles" className="hover:text-gray-200">
-                Serviced vehicles
-              </Link>
-            </li>
-            <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
-                Add vehicle
-              </Link>
-            </li>
-            <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
-                Service History
-              </Link>
-            </li>
-            <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
-                Service Payments
-              </Link>
-            </li>
-            <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
-                Profile
-              </Link>
-            </li>
-            <li className="p-2.5 hover:font-bold">
-              <button
-                className="hover:text-gray-200 cursor-pointer"
-                onClick={() => {
-                  handleLogout();
-                }}
-              >
-                Logout
-              </button>
-            </li>
-          </ul>
         </div>
       )}
       <Welcomebar />
