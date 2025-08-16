@@ -36,7 +36,7 @@ const Navbar = () => {
               <Link to="/" className="hover:text-gray-200">
                 Servicing vehicles
               </Link>
-              <Link to="/" className="hover:text-gray-200">
+              <Link to="/serviced-vehicles" className="hover:text-gray-200">
                 Serviced vehicles
               </Link>
               <Link to="/" className="hover:text-gray-200">
@@ -126,7 +126,7 @@ const Navbar = () => {
               <Link to="/" className="hover:text-gray-200">
                 Servicing vehicles
               </Link>
-              <Link to="/" className="hover:text-gray-200">
+              <Link to="/serviced-vehicles" className="hover:text-gray-200">
                 Serviced vehicles
               </Link>
               <Link to="/" className="hover:text-gray-200">
@@ -191,7 +191,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
+              <Link to="/serviced-vehicles" className="hover:text-gray-200">
                 Serviced vehicles
               </Link>
             </li>
@@ -294,7 +294,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="p-2.5 hover:font-bold">
-              <Link to="/" className="hover:text-gray-200">
+              <Link to="/serviced-vehicles" className="hover:text-gray-200">
                 Serviced vehicles
               </Link>
             </li>
