@@ -1,5 +1,6 @@
 import axios from "axios";
 import { addservicingVehicles } from "../store/slices/servicingVehiclesSlice";
+import { addallVehicles } from "../store/slices/allVehiclesSlice";
 import { SERVER } from "../utils/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,6 @@ const Dashboard = () => {
   const currservicingVehicles = useSelector((store) => store.servicingVehicles);
   useEffect(() => {
     try {
-      //console.log(garageLoginCredentials);
       if (!garageLoginCredentials) {
         navigate("/twogms/login");
       } else {
@@ -22,13 +22,16 @@ const Dashboard = () => {
           const servicingvehicles = await axios.get(
             SERVER + "/servicing-vehicles"
           );
-          console.log(currservicingVehicles);
           dispatch(addservicingVehicles(servicingvehicles?.data?.data));
         };
+        const fetchAllVehicles = async () => {
+          const allvehicles = await axios.get(SERVER + "/twogms/get-vehicles");
+          dispatch(addallVehicles(allvehicles?.data?.data));
+        };
         fetchServicingVehicles();
+        fetchAllVehicles();
       }
     } catch (err) {
-      console.log("test");
       navigate("/");
     }
   }, []);

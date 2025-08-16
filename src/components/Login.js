@@ -9,6 +9,7 @@ import {
 import { removeservicedVehicles } from "../store/slices/servicedVehiclesSlice";
 import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 import { useNavigate } from "react-router";
+import { removeallVehicles } from "../store/slices/allVehiclesSlice";
 
 const Login = () => {
   const [showOtp, setshowOtp] = useState(false);
@@ -31,7 +32,6 @@ const Login = () => {
         phoneNumber,
         password,
       });
-      console.log(result?.data?.data);
       dispatch(addgarageLoginCredentials(result?.data?.data));
       navigate("/");
     } catch (err) {
@@ -46,6 +46,7 @@ const Login = () => {
     dispatch(removegarageLoginCredentials());
     dispatch(removeservicedVehicles());
     dispatch(removeservicingVehicles());
+    dispatch(removeallVehicles());
   }, []);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">

@@ -14,7 +14,6 @@ const ServicedVehicles = () => {
   const currservicedVehicles = useSelector((store) => store.servicedVehicles);
   useEffect(() => {
     try {
-      //console.log(garageLoginCredentials);
       if (!garageLoginCredentials) {
         navigate("/twogms/login");
       } else {
@@ -22,7 +21,6 @@ const ServicedVehicles = () => {
           const servicedVehicles = await axios.get(
             SERVER + "/serviced-vehicles"
           );
-          console.log(currservicedVehicles);
           dispatch(addservicedVehicles(servicedVehicles?.data?.data));
         };
         fetchservicedVehicles();
