@@ -2,14 +2,20 @@ import ReactDOM from "react-dom/client";
 import Dashboard from "./components/Dashboard";
 import ServicedVehicles from "./components/ServicedVehicles";
 import Error from "./components/Error";
+import appStore from "./store/appStore";
+import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
+import { Provider } from "react-redux";
+import Logout from "./components/Logout";
 const AppLayout = () => {
   return (
-    <div>
-      <Navbar />
-      <Outlet />
-    </div>
+    <Provider store={appStore}>
+      <div>
+        <Navbar />
+        <Outlet />
+      </div>
+    </Provider>
   );
 };
 const appRouter = createBrowserRouter([
@@ -20,6 +26,14 @@ const appRouter = createBrowserRouter([
       {
         path: "/",
         element: <Dashboard />,
+      },
+      {
+        path: "/twogms/login",
+        element: <Login />,
+      },
+      {
+        path: "/twogms/logout",
+        element: <Logout />,
       },
       {
         path: "/twogms/serviced-vehicles",
