@@ -19,8 +19,8 @@ const Dashboard = () => {
         withCredentials: true,
       });
       console.log(result);
-      fetchServicingVehicles();
     };
+    fetchServicingVehicles();
   }, []);
   const sampleData = [
     {

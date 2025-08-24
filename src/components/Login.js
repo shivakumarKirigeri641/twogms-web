@@ -35,17 +35,22 @@ export default function Login() {
     //navigate to dashbaord
     try {
       setError("");
-      const result = await axios.post(SERVER + "/twogms/login/" + mobile, {
-        withCredentials: true,
-      });
-      console.log(result?.data?.data);
+      const result = await axios.post(
+        SERVER + "/twogms/login/" + mobile,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       dispatch(addloginCredentials(result?.data?.data));
+      console.log(result?.data?.data);
       navigate("/");
     } catch (err) {
       if (401 === err.statusCode) {
         setError("Invalid mobile number/mobile number not registered!");
+      } else {
+        setError(err.message);
       }
-      setError(err.message);
     }
   };
 
