@@ -50,7 +50,7 @@ export default function EditService({
   const serviceChargeDetails = useSelector(
     (store) => store.serviceChargeDetails
   );
-  console.log(serviceChargeDetails?.standardServiceChargesData);
+  //console.log(serviceChargeDetails?.standardServiceChargesData);
   useEffect(() => {
     if (!loginCredentials) {
       navigate("/twogms/login");
@@ -346,10 +346,10 @@ export default function EditService({
 
   // Observations
   function onAddObservation() {
-    if (!observationTitle.trim()) {
+    /*if (!observationTitle.trim()) {
       alert("Observation title is required");
       return;
-    }
+    }*/
     if (observationEdit !== null) {
       setObservations(
         observations.map((o, idx) =>
@@ -541,7 +541,7 @@ export default function EditService({
   }
   const CheckAndFillCustomerDetails = async (e) => {
     setCustomerName("");
-    if (9 === vehicleNumber.length) {
+    if (7 <= vehicleNumber.length) {
       try {
         const result = await axios.get(SERVER + "/twogms/search-vehicle/" + e, {
           withCredentials: true,
@@ -549,6 +549,14 @@ export default function EditService({
         console.log(result?.data?.data);
         if (result?.data?.data) {
           setCustomerName(result?.data?.data?.fkCustomerDataId?.customerName);
+          setAltMobileNumber(
+            result?.data?.data?.fkCustomerDataId?.customerAltMobileNumber
+              ? result?.data?.data?.fkCustomerDataId?.customerAltMobileNumber
+              : result?.data?.data?.fkCustomerDataId?.customerMobileNumber
+          );
+          setMobileNumber(
+            result?.data?.data?.fkCustomerDataId?.customerMobileNumber
+          );
         }
       } catch (err) {}
     }
@@ -899,48 +907,6 @@ export default function EditService({
               )}
             </div>
 
-            {/* Email */}
-            <div className="relative">
-              <label htmlFor="email" className="block font-medium mb-1">
-                Email (optional)
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="example@mail.com"
-                aria-describedby="error-email"
-              />
-              {errors.email && showErrorPopOver.email && (
-                <div
-                  id="error-email"
-                  className="absolute top-full left-0 mt-1 text-sm bg-red-100 text-red-700 p-1 rounded shadow animate-fadeIn"
-                  role="alert"
-                >
-                  {errors.email}
-                </div>
-              )}
-            </div>
-
-            {/* Address */}
-            <div className="md:col-span-2">
-              <label htmlFor="address" className="block font-medium mb-1">
-                Address (optional)
-              </label>
-              <textarea
-                id="address"
-                rows={3}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors border-gray-300 resize-none"
-                placeholder="Customer address"
-              />
-            </div>
-
             {/* Alt Mobile Number */}
             <div className="relative">
               <label
@@ -1105,7 +1071,7 @@ export default function EditService({
               <input
                 type="text"
                 placeholder="Observation Title"
-                className="w-full border border-gray-300 rounded px-3 py-1 mb-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="hidden w-full border border-gray-300 rounded px-3 py-1 mb-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 value={observationTitle}
                 onChange={(e) => setObservationTitle(e.target.value)}
                 aria-label="Observation title"
