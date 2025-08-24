@@ -26,6 +26,7 @@ const appRouter = createBrowserRouter([
         element: <ServicedVehicles />,
       },
     ],
+    errorElement: <Error />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
