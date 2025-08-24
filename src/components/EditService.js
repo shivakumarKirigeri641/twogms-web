@@ -130,6 +130,10 @@ export default function EditService({
   const [labourCharges, setLabourCharges] = useState(
     vehicleData?.labourCharges || 0
   );
+  const [pickupCharges, setpickupCharges] = useState(
+    vehicleData?.pickupCharges || 0
+  );
+  const [dropCharges, setdropCharges] = useState(vehicleData?.dropCharges || 0);
   const [washingCharges, setWashingCharges] = useState(
     vehicleData?.washingCharges || 0
   );
@@ -486,7 +490,9 @@ export default function EditService({
     partsTotalSGST +
     stdServiceAmount +
     labourCharges +
-    (washingCharges || 0);
+    pickupCharges +
+    dropCharges +
+    washingCharges;
 
   // Animate showing/hiding errors (simple fade)
   useEffect(() => {
@@ -522,6 +528,8 @@ export default function EditService({
       observations,
       parts,
       staffAssignments,
+      pickupCharges,
+      dropCharges,
       selectedStdServices,
       labourCharges,
       washingCharges,
@@ -547,6 +555,83 @@ export default function EditService({
   };
 
   //toggles
+  const [washingChargesCheck, setwashingChargesCheck] = useState(false);
+  const toggleWashingCharges = () => {
+    setwashingChargesCheck(!washingChargesCheck);
+    !washingChargesCheck
+      ? setWashingCharges(
+          serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+            serviceChargeDetails?.washingServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+            (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+              serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                ?.length - 1
+            ].amount *
+              (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+                serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].cGST +
+                serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+                  serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                    ?.length - 1
+                ].sGST)) /
+              100
+        )
+      : setWashingCharges(0);
+  };
+  //pickuip
+  const [pickupChargesCheck, setpickupChargesCheck] = useState(false);
+  const togglepickupCharges = () => {
+    setpickupChargesCheck(!pickupChargesCheck);
+    !pickupChargesCheck
+      ? setpickupCharges(
+          serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+            (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+              serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                ?.length - 1
+            ].amount *
+              (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+                serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].cGST +
+                serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+                  serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                    ?.length - 1
+                ].sGST)) /
+              100
+        )
+      : setpickupCharges(0);
+  };
+  //drop
+  const [dropChargesCheck, setdropChargesCheck] = useState(false);
+  const toggleDropCharges = () => {
+    setdropChargesCheck(!dropChargesCheck);
+    !dropChargesCheck
+      ? setdropCharges(
+          serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+            serviceChargeDetails?.dropServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+            (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+              serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                ?.length - 1
+            ].amount *
+              (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+                serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].cGST +
+                serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+                  serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                    ?.length - 1
+                ].sGST)) /
+              100
+        )
+      : setdropCharges(0);
+  };
   // --- Render ---
 
   return (
@@ -1233,7 +1318,7 @@ export default function EditService({
         </section>
 
         {/* Billing Details */}
-        <section className="mb-8 border-b pb-4">
+        <section className="mb-8 border-b pb-4 text-sm">
           <h2 className="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">
             Billing Details
           </h2>
@@ -1270,67 +1355,213 @@ export default function EditService({
           </div>
 
           {/* Labour Charges */}
-          <div className="mb-4 max-w-xs">
-            <label htmlFor="labourCharges" className="block font-medium mb-1">
-              Labour Charges (₹)
-            </label>
-            <input
-              id="labourCharges"
-              type="number"
-              min="0"
-              value={labourCharges}
-              onChange={(e) => {
-                const val = e.target.value;
-                if (val === "" || (/^\d+$/.test(val) && Number(val) >= 0))
-                  setLabourCharges(Number(val));
-              }}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
+          <div className="mb-4 max-w-sm">
+            <div className="">
+              <label
+                htmlFor="washingCharges"
+                className="block font-medium mb-1"
+              >
+                Labour Charges
+              </label>
+              <div className="flex">
+                <input
+                  id="labourCharges"
+                  type="number"
+                  disabled
+                  min="0"
+                  value={
+                    serviceChargeDetails?.labourServiceChargesData
+                      ?.amountSummary[
+                      serviceChargeDetails?.labourServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].amount +
+                    (serviceChargeDetails?.labourServiceChargesData
+                      ?.amountSummary[
+                      serviceChargeDetails?.labourServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].amount *
+                      (serviceChargeDetails?.labourServiceChargesData
+                        ?.amountSummary[
+                        serviceChargeDetails?.labourServiceChargesData
+                          ?.amountSummary?.length - 1
+                      ].cGST +
+                        serviceChargeDetails?.labourServiceChargesData
+                          ?.amountSummary[
+                          serviceChargeDetails?.labourServiceChargesData
+                            ?.amountSummary?.length - 1
+                        ].sGST)) /
+                      100
+                  }
+                  /*onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === "" || (/^\d+$/.test(val) && Number(val) >= 0))
+                    setWashingCharges(Number(val));
+                }}*/
+                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <input
+                  type="checkbox"
+                  className="p-2 m-2 w-10"
+                  checked={true}
+                  disabled
+                />
+              </div>
+            </div>
           </div>
 
           {/* Washing Charges (optional) */}
           <div className="mb-4 max-w-sm">
-            <div className="flex justify-between">
+            <div className="">
               <label
                 htmlFor="washingCharges"
                 className="block font-medium mb-1"
               >
                 Washing Charges (₹) (Optional)
               </label>
-              <input
-                id="washingCharges"
-                type="number"
-                min="0"
-                value={
-                  serviceChargeDetails?.washingServiceChargesData
-                    ?.amountSummary[
+              <div className="flex">
+                <input
+                  id="washingCharges"
+                  disabled
+                  type="number"
+                  min="0"
+                  value={
                     serviceChargeDetails?.washingServiceChargesData
-                      ?.amountSummary?.length - 1
-                  ].amount +
-                  (serviceChargeDetails?.washingServiceChargesData
-                    ?.amountSummary[
-                    serviceChargeDetails?.washingServiceChargesData
-                      ?.amountSummary?.length - 1
-                  ].amount *
+                      ?.amountSummary[
+                      serviceChargeDetails?.washingServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].amount +
                     (serviceChargeDetails?.washingServiceChargesData
                       ?.amountSummary[
                       serviceChargeDetails?.washingServiceChargesData
                         ?.amountSummary?.length - 1
-                    ].cGST +
-                      serviceChargeDetails?.washingServiceChargesData
+                    ].amount *
+                      (serviceChargeDetails?.washingServiceChargesData
                         ?.amountSummary[
                         serviceChargeDetails?.washingServiceChargesData
                           ?.amountSummary?.length - 1
-                      ].sGST)) /
-                    100
-                }
-                /*onChange={(e) => {
+                      ].cGST +
+                        serviceChargeDetails?.washingServiceChargesData
+                          ?.amountSummary[
+                          serviceChargeDetails?.washingServiceChargesData
+                            ?.amountSummary?.length - 1
+                        ].sGST)) /
+                      100
+                  }
+                  /*onChange={(e) => {
                   const val = e.target.value;
                   if (val === "" || (/^\d+$/.test(val) && Number(val) >= 0))
                     setWashingCharges(Number(val));
                 }}*/
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              />
+                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <input
+                  type="checkbox"
+                  className="p-2 m-2 w-10"
+                  checked={washingChargesCheck}
+                  onChange={toggleWashingCharges}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* pickup Charges (optional) */}
+          <div className="mb-4 max-w-sm">
+            <div className="">
+              <label className="block font-medium mb-1">
+                Pickup Charges (₹) (Optional)
+              </label>
+              <div className="flex">
+                <input
+                  type="number"
+                  disabled
+                  min="0"
+                  value={
+                    serviceChargeDetails?.pickupServiceChargesData
+                      ?.amountSummary[
+                      serviceChargeDetails?.pickupServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].amount +
+                    (serviceChargeDetails?.pickupServiceChargesData
+                      ?.amountSummary[
+                      serviceChargeDetails?.pickupServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].amount *
+                      (serviceChargeDetails?.pickupServiceChargesData
+                        ?.amountSummary[
+                        serviceChargeDetails?.pickupServiceChargesData
+                          ?.amountSummary?.length - 1
+                      ].cGST +
+                        serviceChargeDetails?.pickupServiceChargesData
+                          ?.amountSummary[
+                          serviceChargeDetails?.pickupServiceChargesData
+                            ?.amountSummary?.length - 1
+                        ].sGST)) /
+                      100
+                  }
+                  /*onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === "" || (/^\d+$/.test(val) && Number(val) >= 0))
+                    setWashingCharges(Number(val));
+                }}*/
+                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <input
+                  type="checkbox"
+                  className="p-2 m-2 w-10"
+                  checked={pickupChargesCheck}
+                  onChange={togglepickupCharges}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* drop Charges (optional) */}
+          <div className="mb-4 max-w-sm">
+            <div className="">
+              <label className="block font-medium mb-1">
+                Drop Charges (₹) (Optional)
+              </label>
+              <div className="flex">
+                <input
+                  type="number"
+                  disabled
+                  min="0"
+                  value={
+                    serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+                      serviceChargeDetails?.dropServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].amount +
+                    (serviceChargeDetails?.dropServiceChargesData
+                      ?.amountSummary[
+                      serviceChargeDetails?.dropServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].amount *
+                      (serviceChargeDetails?.dropServiceChargesData
+                        ?.amountSummary[
+                        serviceChargeDetails?.dropServiceChargesData
+                          ?.amountSummary?.length - 1
+                      ].cGST +
+                        serviceChargeDetails?.dropServiceChargesData
+                          ?.amountSummary[
+                          serviceChargeDetails?.dropServiceChargesData
+                            ?.amountSummary?.length - 1
+                        ].sGST)) /
+                      100
+                  }
+                  /*onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === "" || (/^\d+$/.test(val) && Number(val) >= 0))
+                    setWashingCharges(Number(val));
+                }}*/
+                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <input
+                  type="checkbox"
+                  className="p-2 m-2 w-10"
+                  checked={dropChargesCheck}
+                  onChange={toggleDropCharges}
+                />
+              </div>
             </div>
           </div>
 
@@ -1380,6 +1611,14 @@ export default function EditService({
             <div className="flex justify-between">
               <span>Washing Charges</span>
               <span>₹{washingCharges}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Pickup Charges</span>
+              <span>₹{pickupCharges}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Drop Charges</span>
+              <span>₹{dropCharges}</span>
             </div>
             <hr className="border-gray-300" />
             <div className="flex justify-between font-semibold text-indigo-700 text-lg">
