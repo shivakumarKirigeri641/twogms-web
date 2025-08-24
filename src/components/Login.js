@@ -45,7 +45,6 @@ export default function Login() {
         }
       );
       dispatch(addloginCredentials(result?.data?.data));
-      console.log(result?.data?.data);
       navigate("/");
     } catch (err) {
       if (401 === err.statusCode) {

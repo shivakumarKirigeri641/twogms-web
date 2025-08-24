@@ -19,7 +19,6 @@ const Dashboard = () => {
       const result = await axios.get(SERVER + "/twogms/servicing-vehicles", {
         withCredentials: true,
       });
-      console.log(result?.data?.data);
       dispatch(addservicingVehicles(result?.data?.data));
     };
     fetchServicingVehicles();
