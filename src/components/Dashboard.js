@@ -11,7 +11,6 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const loginCredentials = useSelector((store) => store.loginCredentials);
   const servicingVehicles = useSelector((store) => store.servicingVehicles);
-  console.log("login:", loginCredentials);
   useEffect(() => {
     if (!loginCredentials) {
       navigate("/twogms/login");

@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { Provider } from "react-redux";
 import Logout from "./components/Logout";
+import EditService from "./components/EditService";
 const AppLayout = () => {
   return (
     <Provider store={appStore}>
@@ -34,6 +35,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/twogms/logout",
         element: <Logout />,
+      },
+      {
+        path: "/twogms/edit-service",
+        element: <EditService />,
       },
       {
         path: "/twogms/serviced-vehicles",

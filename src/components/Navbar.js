@@ -28,7 +28,7 @@ const ownerMenu = [
   },
   {
     name: "Add Vehicle",
-    href: "/twogms/add-vehicle",
+    href: "/twogms/edit-service",
     icon: <PlusCircle size={18} />,
   },
   { name: "Statistics", href: "#", icon: <BarChart3 size={18} /> },
@@ -57,7 +57,7 @@ const staffMenu = [
   },
   {
     name: "Add Vehicle",
-    href: "/twogms/add-vehicle",
+    href: "/twogms/edit-service",
     icon: <PlusCircle size={18} />,
   },
   { name: "Profile", href: "#", icon: <User size={18} /> },

@@ -34,7 +34,7 @@ const ServicedVehicles = () => {
       <div className="bg-gradient-to-b from-yellow-50 to-yellow-100 p-2 rounded-2xl min-h-screen my-5">
         <div className="text-left space-y-2">
           <motion.h2 className="text-2xl font-bold text-gray-800">
-            Ongoing Servicing – Two Wheelers
+            Serviced – Two Wheelers
           </motion.h2>
           <motion.p
             className="text-gray-600 text-sm mx-auto text-left py-2"
