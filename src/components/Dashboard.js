@@ -25,56 +25,6 @@ const Dashboard = () => {
     };
     fetchServicingVehicles();
   }, []);
-  const sampleData = [
-    {
-      id: 1,
-      vehicleNumber: "KA01AB1234",
-      brandModel: "Honda Activa",
-      customerName: "Ramesh",
-      customerMobile: "9876543210",
-      serviceStatus: "Completed",
-    },
-    {
-      id: 2,
-      vehicleNumber: "KA02XY5678",
-      brandModel: "Bajaj Pulsar",
-      customerName: "Suresh",
-      customerMobile: "9123456780",
-      serviceStatus: "In Progress",
-    },
-    {
-      id: 3,
-      vehicleNumber: "KA03MN4321",
-      brandModel: "TVS Jupiter",
-      customerName: "Mahesh",
-      customerMobile: "9988776655",
-      serviceStatus: "Pending",
-    },
-    {
-      id: 4,
-      vehicleNumber: "KA04PQ2468",
-      brandModel: "Royal Enfield",
-      customerName: "Kiran",
-      customerMobile: "9000011111",
-      serviceStatus: "Completed",
-    },
-    {
-      id: 5,
-      vehicleNumber: "KA05LM9876",
-      brandModel: "Suzuki Access",
-      customerName: "Ravi",
-      customerMobile: "9888777666",
-      serviceStatus: "Pending",
-    },
-    {
-      id: 6,
-      vehicleNumber: "KA06CD5432",
-      brandModel: "Hero Splendor",
-      customerName: "Anil",
-      customerMobile: "9112233445",
-      serviceStatus: "In Progress",
-    },
-  ];
   return (
     <div
       className="flex items-center justify-center bg-cover bg-center bg-fixed"

@@ -23,7 +23,7 @@ const ownerMenu = [
   { name: "Servicing Vehicles", href: "/", icon: <Wrench size={18} /> },
   {
     name: "Serviced Vehicles",
-    href: "/serviced-vehicles",
+    href: "/twogms/serviced-vehicles",
     icon: <CarFront size={18} />,
   },
   {
