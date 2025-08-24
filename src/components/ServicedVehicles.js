@@ -1,4 +1,19 @@
+import axios from "axios";
+import { SERVER } from "../utils/constants";
+import { useEffect } from "react";
+
 const ServicedVehicles = () => {
+  useEffect(() => {
+    if (!loginCredentials) {
+      navigate("/twogms/login");
+    } else {
+      const fetchServicingVehicles = async () => {
+        const result = await axios.get(SERVER + "/twogms/serviced-vehicles");
+        console.log(result);
+      };
+      fetchServicingVehicles();
+    }
+  }, []);
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-fixed px-4"

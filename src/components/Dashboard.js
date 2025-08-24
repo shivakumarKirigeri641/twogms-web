@@ -1,16 +1,26 @@
 import { motion } from "framer-motion";
+import { SERVER } from "../utils/constants";
 import DataTable from "./DataTable";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import axios from "axios";
 
 const Dashboard = () => {
-  const loginCredentials = useSelector((store) => store.loginCredentials);
   const navigate = useNavigate();
+  const loginCredentials = useSelector((store) => store.loginCredentials);
+  console.log("login:", loginCredentials);
   useEffect(() => {
     if (!loginCredentials) {
       navigate("/twogms/login");
     }
+    const fetchServicingVehicles = async () => {
+      const result = await axios.get(SERVER + "/twogms/servicing-vehicles", {
+        withCredentials: true,
+      });
+      console.log(result);
+      fetchServicingVehicles();
+    };
   }, []);
   const sampleData = [
     {
