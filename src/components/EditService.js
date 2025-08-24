@@ -20,7 +20,7 @@ const fetchLabourCharges = () => Promise.resolve(800);
 const fetchWashingCharges = () => Promise.resolve(100);
 
 // --- Autosuggestion brand/model list (could be fetched from API) ---
-const brandModelsList = [
+let brandModelsList = [
   "Honda City",
   "Honda Accord",
   "Honda CR-V",
@@ -47,6 +47,9 @@ export default function EditService({
   const navigate = useNavigate();
   const loginCredentials = useSelector((store) => store.loginCredentials);
   const allStaffsDetails = useSelector((store) => store.allStaffsDetails);
+  const allVehicles = useSelector((store) => store.allVehicles);
+  brandModelsList = allVehicles?.map((x) => x.fkTwoWheelerDataId?.variantName);
+  console.log("brandlist", allVehicles);
   const serviceChargeDetails = useSelector(
     (store) => store.serviceChargeDetails
   );
@@ -160,9 +163,9 @@ export default function EditService({
   const [selectedStdServices, setSelectedStdServices] = useState([]);
   // Autosuggest for brand model input
   useEffect(() => {
-    if (brandInputFocused && brandModel.trim().length > 0) {
-      const filtered = brandModelsList.filter((bm) =>
-        bm.toLowerCase().includes(brandModel.trim().toLowerCase())
+    if (brandInputFocused && brandModel?.trim().length > 0) {
+      const filtered = brandModelsList?.filter((bm) =>
+        bm?.toLowerCase().includes(brandModel?.trim().toLowerCase())
       );
       setBrandSuggestions(filtered);
     } else {
@@ -175,7 +178,7 @@ export default function EditService({
     function handleClickOutside(event) {
       if (brandBoxRef.current && !brandBoxRef.current.contains(event.target)) {
         setBrandSuggestions([]);
-        if (!brandModelsList.includes(brandModel)) setBrandModel(""); // clear as requested
+        if (!brandModelsList?.includes(brandModel)) setBrandModel(""); // clear as requested
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -199,7 +202,7 @@ export default function EditService({
 
   function validateBrandModel(bm) {
     if (!bm.trim()) return "Brand/model is required";
-    if (!brandModelsList.includes(bm))
+    if (!brandModelsList?.includes(bm))
       return "Select valid brand/model from suggestions";
     return "";
   }
@@ -714,7 +717,7 @@ export default function EditService({
                   // Delay clearing so onClick suggestions is possible
                   setTimeout(() => {
                     setBrandInputFocused(false);
-                    if (!brandModelsList.includes(brandModel))
+                    if (!brandModelsList?.includes(brandModel))
                       setBrandModel("");
                   }, 150);
                 }}
@@ -725,9 +728,9 @@ export default function EditService({
                 placeholder="Start typing brand/model..."
                 aria-describedby="error-brandModel"
               />
-              {brandSuggestions.length > 0 && (
+              {brandSuggestions?.length > 0 && (
                 <ul className="absolute z-20 w-full max-h-40 overflow-auto bg-white border border-gray-300 rounded shadow mt-1">
-                  {brandSuggestions.map((suggestion) => (
+                  {brandSuggestions?.map((suggestion) => (
                     <li
                       key={suggestion}
                       className="px-3 py-2 cursor-pointer hover:bg-indigo-600 hover:text-white"
@@ -744,7 +747,7 @@ export default function EditService({
                   ))}
                 </ul>
               )}
-              {errors.brandModel && showErrorPopOver.brandModel && (
+              {errors.brandModel && showErrorPopOver?.brandModel && (
                 <div
                   id="error-brandModel"
                   className="absolute top-full left-0 mt-1 text-sm bg-red-100 text-red-700 p-1 rounded shadow animate-fadeIn"
