@@ -8,12 +8,26 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
 
   // 🔍 Filter data based on search query
-  const filteredData = useMemo(() => {
+  /*const filteredData = useMemo(() => {
     return data?.filter((row) =>
-      Object.values(row).join(" ").toLowerCase().includes(search.toLowerCase())
+      Object.values(row).join("").toLowerCase().includes(search.toLowerCase())
     );
-  }, [data, search]);
-
+  }, [data, search]);*/
+  const filteredData = data?.filter(
+    (x) =>
+      x?.fkVehicleDataId?.vehicleNumber
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      x?.fkVehicleDataId?.fkTwoWheelerDataId?.variantName
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      x?.fkVehicleDataId?.fkCustomerDataId?.customerName
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      x?.fkVehicleDataId?.fkCustomerDataId?.customerMobileNumber
+        .toLowerCase()
+        .includes(search.toLowerCase())
+  );
   // 📄 Pagination logic
   const totalPages = Math.ceil(filteredData?.length / rowsPerPage);
   const paginatedData = filteredData?.slice(
@@ -61,7 +75,7 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
       {/* 📊 Table (Desktop) */}
       <div className="hidden md:block overflow-x-auto">
         <motion.table
-          className="min-w-full border border-gray-200 shadow-md rounded-2xl overflow-hidden"
+          className="min-w-full border border-gray-200 shadow-md rounded-2xl overflow-hidden text-sm"
           transition={{ duration: 0.4 }}
         >
           <thead className="bg-gray-100 text-gray-700 text-sm uppercase font-semibold">
@@ -83,11 +97,23 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
                   className="hover:bg-gray-50 transition-colors"
                   transition={{ delay: index * 0.05 }}
                 >
-                  <td className="px-4 py-3">{row.id}</td>
-                  <td className="px-4 py-3 font-medium">{row.vehicleNumber}</td>
-                  <td className="px-4 py-3">{row.brandModel}</td>
-                  <td className="px-4 py-3">{row.customerName}</td>
-                  <td className="px-4 py-3">{row.customerMobile}</td>
+                  <td className="px-4 py-3">{index + 1}</td>
+                  <td className="px-4 py-3 font-medium">
+                    {row?.fkVehicleDataId?.vehicleNumber}
+                  </td>
+                  <td className="px-4 py-3">
+                    {row?.fkVehicleDataId?.fkTwoWheelerDataId?.variantName}
+                  </td>
+                  <td className="px-4 py-3">
+                    {row?.fkVehicleDataId?.fkCustomerDataId?.customerName}
+                  </td>
+                  <td className="px-4 py-3">
+                    +91
+                    {
+                      row?.fkVehicleDataId?.fkCustomerDataId
+                        ?.customerMobileNumber
+                    }
+                  </td>
                   <td className="px-4 py-3">
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${
@@ -98,11 +124,11 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
                           : "bg-red-100 text-red-700"
                       }`}
                     >
-                      {row.serviceStatus}
+                      {row.serviceStatus}In Progress
                     </span>
                   </td>
                   <td className="px-4 py-3 flex justify-center gap-2">
-                    <button className="flex items-center gap-1 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition">
+                    <button className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500 text-gray-200 rounded-xl hover:bg-gray-200 transition font-bold">
                       <Pencil className="w-4 h-4" /> Edit
                     </button>
                   </td>
@@ -131,26 +157,26 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
               className="border rounded-xl p-4 shadow-sm bg-white space-y-2"
               transition={{ delay: index * 0.05 }}
             >
-              <p className="text-sm">
-                <span className="font-semibold">ID:</span> {row.id}
-              </p>
-              <p className="text-sm">
+              <div className="text-sm flex justify-between">
+                <span className="font-semibold">ID:</span> {index + 1}
+              </div>
+              <div className="text-sm flex justify-between">
                 <span className="font-semibold">Vehicle:</span>{" "}
-                {row.vehicleNumber}
-              </p>
-              <p className="text-sm">
+                {row?.fkVehicleDataId?.vehicleNumber}
+              </div>
+              <div className="text-sm flex justify-between">
                 <span className="font-semibold">Brand/Model:</span>{" "}
-                {row.brandModel}
-              </p>
-              <p className="text-sm">
+                {row?.fkVehicleDataId?.fkTwoWheelerDataId?.variantName}
+              </div>
+              <div className="text-sm flex justify-between">
                 <span className="font-semibold">Customer:</span>{" "}
-                {row.customerName}
-              </p>
-              <p className="text-sm">
-                <span className="font-semibold">Mobile:</span>{" "}
-                {row.customerMobile}
-              </p>
-              <p className="text-sm">
+                {row?.fkVehicleDataId?.fkCustomerDataId?.customerName}
+              </div>
+              <div className="text-sm flex justify-between">
+                <span className="font-semibold">Mobile:</span> +91
+                {row?.fkVehicleDataId?.fkCustomerDataId?.customerMobileNumber}
+              </div>
+              <div className="text-sm flex justify-between">
                 <span className="font-semibold">Status:</span>{" "}
                 <span
                   className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
@@ -161,14 +187,11 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
                       : "bg-red-100 text-red-700"
                   }`}
                 >
-                  {row.serviceStatus}
+                  {row.serviceStatus}In Progress
                 </span>
-              </p>
+              </div>
               <div className="flex gap-2 pt-2">
-                <button className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-xl hover:bg-blue-200 transition">
-                  <RefreshCw className="w-4 h-4" /> Repeat
-                </button>
-                <button className="flex items-center gap-1 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition">
+                <button className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500  rounded-xl hover:bg-gray-200 transition text-gray-200 font-bold">
                   <Pencil className="w-4 h-4" /> Edit
                 </button>
               </div>

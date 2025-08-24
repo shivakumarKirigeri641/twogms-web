@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 import { SERVER } from "../utils/constants";
 import DataTable from "./DataTable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import axios from "axios";
-
+import { addservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const loginCredentials = useSelector((store) => store.loginCredentials);
+  const servicingVehicles = useSelector((store) => store.servicingVehicles);
   console.log("login:", loginCredentials);
   useEffect(() => {
     if (!loginCredentials) {
@@ -18,7 +20,8 @@ const Dashboard = () => {
       const result = await axios.get(SERVER + "/twogms/servicing-vehicles", {
         withCredentials: true,
       });
-      console.log(result);
+      console.log(result?.data?.data);
+      dispatch(addservicingVehicles(result?.data?.data));
     };
     fetchServicingVehicles();
   }, []);
@@ -95,7 +98,7 @@ const Dashboard = () => {
             services with the provided actions.
           </motion.p>
         </div>
-        <DataTable data={sampleData} />
+        <DataTable data={servicingVehicles} />
       </div>
     </div>
   );

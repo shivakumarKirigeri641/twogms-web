@@ -8,6 +8,7 @@ import {
 } from "../store/slices/loginCredentialsSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export default function Login() {
   const validateMobile = (value) => /^[6-9]\d{9}$/.test(value);
   useEffect(() => {
     dispatch(removeloginCredentials());
+    dispatch(removeservicingVehicles());
   }, []);
   const handleGetOtp = async () => {
     /*if (!validateMobile(mobile)) {
