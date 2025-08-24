@@ -110,9 +110,7 @@ export default function EditService({
 
   // Billing details (fetched and composed)
   const [standardServices, setStandardServices] = useState([]);
-  const [selectedStdServices, setSelectedStdServices] = useState(
-    vehicleData?.selectedStdServices || []
-  );
+  const [selectedStdServices, setSelectedStdServices] = useState([]);
   const [labourCharges, setLabourCharges] = useState(
     vehicleData?.labourCharges || 0
   );
@@ -141,14 +139,19 @@ export default function EditService({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginCredentials = useSelector((store) => store.loginCredentials);
+  const allStaffsDetails = useSelector((store) => store.allStaffsDetails);
+  const serviceChargeDetails = useSelector(
+    (store) => store.serviceChargeDetails
+  );
   useEffect(() => {
     if (!loginCredentials) {
       navigate("/twogms/login");
     }
-    //fetchStaff().then((list) => setStaffList(list));
-    //fetchStandardServices().then(setStandardServices);
-    //fetchLabourCharges().then(setLabourCharges);
-    //fetchWashingCharges().then(setWashingCharges);
+    setStaffList(allStaffsDetails);
+    //setStandardServices(serviceChargeDetails?.standardServiceChargesData?.list);
+    //setWashingCharges(serviceChargeDetails?.washingServiceChargesData);
+    //setpickupServiceCharges();
+    //setdropServiceCharges();
   }, []);
 
   // Autosuggest for brand model input
@@ -452,9 +455,9 @@ export default function EditService({
   }
 
   // Staff assignments selection handler (multiselect by checkboxes)
-  function onToggleStaff(id) {
+  function onToggleStaff(_id) {
     setStaffAssignments((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+      prev.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id]
     );
   }
 
@@ -470,8 +473,12 @@ export default function EditService({
   const partsTotalCGST = parts.reduce((sum, p) => sum + p.cGST, 0);
   const partsTotalSGST = parts.reduce((sum, p) => sum + p.sGST, 0);
   const stdServiceAmount = standardServices
-    .filter((svc) => selectedStdServices.includes(svc.id))
-    .reduce((sum, svc) => sum + svc.amount, 0);
+    .filter((svc) => selectedStdServices.includes(svc._id))
+    .reduce(
+      (sum, svc) =>
+        sum + (svc?.amount + (svc?.amount * (svc?.cGST + svc?.sGST)) / 100),
+      0
+    );
 
   const billingTotal =
     partsTotalAmount +
@@ -539,6 +546,7 @@ export default function EditService({
     }
   };
 
+  //toggles
   // --- Render ---
 
   return (
@@ -1194,23 +1202,30 @@ export default function EditService({
           <h2 className="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">
             Staff Assignments
           </h2>
-          {staffList.length === 0 ? (
+          {staffList?.length === 0 ? (
             <p>Loading staff...</p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {staffList.map((staff) => (
+              {staffList?.map((staff) => (
                 <label
-                  key={staff.id}
+                  key={staff?._id}
                   className="inline-flex items-center cursor-pointer select-none"
-                  title={`Assign to ${staff.name}`}
+                  title={`Assign to ${staff?.staffName}`}
                 >
                   <input
                     type="checkbox"
-                    checked={staffAssignments.includes(staff.id)}
-                    onChange={() => onToggleStaff(staff.id)}
+                    checked={staffAssignments.includes(staff?._id)}
+                    onChange={() => onToggleStaff(staff?._id)}
                     className="form-checkbox h-5 w-5 text-indigo-600"
                   />
-                  <span className="ml-2">{staff.name}</span>
+                  <span className="ml-2">
+                    {staff?.staffName}{" "}
+                    {staff?.isGarageOwner ? (
+                      <span>(Owner)</span>
+                    ) : (
+                      <span></span>
+                    )}
+                  </span>
                 </label>
               ))}
             </div>
@@ -1226,23 +1241,27 @@ export default function EditService({
           {/* Standard Services */}
           <div className="mb-4">
             <p className="font-semibold mb-2">Standard Services</p>
-            {standardServices.length === 0 ? (
+            {standardServices?.list?.length === 0 ? (
               <p>Loading services...</p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                {standardServices.map((svc) => (
+                {standardServices?.list?.map((svc) => (
                   <label
-                    key={svc.id}
+                    key={svc?._id}
                     className="inline-flex items-center cursor-pointer"
                   >
                     <input
                       type="checkbox"
-                      checked={selectedStdServices.includes(svc.id)}
-                      onChange={() => onToggleStdService(svc.id)}
+                      checked={selectedStdServices.includes(svc?._id)}
+                      onChange={() => onToggleStdService(svc?.id)}
                       className="form-checkbox h-5 w-5 text-indigo-600"
                     />
                     <span className="ml-2">
-                      {svc.name} - ₹{svc.amount.toFixed(2)}
+                      {svc?.title} - ₹
+                      {svc?.amount?.toFixed(2) +
+                        (svc?.amount?.toFixed(2) *
+                          (svc?.cGST?.toFixed(2) + svc?.sGST?.toFixed(2))) /
+                          100}
                     </span>
                   </label>
                 ))}
@@ -1270,22 +1289,49 @@ export default function EditService({
           </div>
 
           {/* Washing Charges (optional) */}
-          <div className="mb-4 max-w-xs">
-            <label htmlFor="washingCharges" className="block font-medium mb-1">
-              Washing Charges (₹) (Optional)
-            </label>
-            <input
-              id="washingCharges"
-              type="number"
-              min="0"
-              value={washingCharges}
-              onChange={(e) => {
-                const val = e.target.value;
-                if (val === "" || (/^\d+$/.test(val) && Number(val) >= 0))
-                  setWashingCharges(Number(val));
-              }}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
+          <div className="mb-4 max-w-sm">
+            <div className="flex justify-between">
+              <label
+                htmlFor="washingCharges"
+                className="block font-medium mb-1"
+              >
+                Washing Charges (₹) (Optional)
+              </label>
+              <input
+                id="washingCharges"
+                type="number"
+                min="0"
+                value={
+                  serviceChargeDetails?.washingServiceChargesData
+                    ?.amountSummary[
+                    serviceChargeDetails?.washingServiceChargesData
+                      ?.amountSummary?.length - 1
+                  ].amount +
+                  (serviceChargeDetails?.washingServiceChargesData
+                    ?.amountSummary[
+                    serviceChargeDetails?.washingServiceChargesData
+                      ?.amountSummary?.length - 1
+                  ].amount *
+                    (serviceChargeDetails?.washingServiceChargesData
+                      ?.amountSummary[
+                      serviceChargeDetails?.washingServiceChargesData
+                        ?.amountSummary?.length - 1
+                    ].cGST +
+                      serviceChargeDetails?.washingServiceChargesData
+                        ?.amountSummary[
+                        serviceChargeDetails?.washingServiceChargesData
+                          ?.amountSummary?.length - 1
+                      ].sGST)) /
+                    100
+                }
+                /*onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === "" || (/^\d+$/.test(val) && Number(val) >= 0))
+                    setWashingCharges(Number(val));
+                }}*/
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+            </div>
           </div>
 
           {/* Parts & Accessories Billing (readonly) */}
@@ -1313,11 +1359,11 @@ export default function EditService({
           <div className="space-y-2 text-gray-800">
             <div className="flex justify-between">
               <span>Parts Amount</span>
-              <span>₹{partsTotalAmount.toFixed(2)}</span>
+              <span>₹{partsTotalAmount}</span>
             </div>
             <div className="flex justify-between">
               <span>Total cGST</span>
-              <span>₹{partsTotalCGST.toFixed(2)}</span>
+              <span>₹{partsTotalCGST}</span>
             </div>
             <div className="flex justify-between">
               <span>Total sGST</span>
@@ -1325,20 +1371,20 @@ export default function EditService({
             </div>
             <div className="flex justify-between">
               <span>Standard Services</span>
-              <span>₹{stdServiceAmount.toFixed(2)}</span>
+              <span>₹{stdServiceAmount}</span>
             </div>
             <div className="flex justify-between">
               <span>Labour Charges</span>
-              <span>₹{labourCharges.toFixed(2)}</span>
+              <span>₹{labourCharges}</span>
             </div>
             <div className="flex justify-between">
               <span>Washing Charges</span>
-              <span>₹{(washingCharges || 0).toFixed(2)}</span>
+              <span>₹{washingCharges}</span>
             </div>
             <hr className="border-gray-300" />
             <div className="flex justify-between font-semibold text-indigo-700 text-lg">
               <span>Total</span>
-              <span>₹{billingTotal.toFixed(2)}</span>
+              <span>₹{billingTotal}</span>
             </div>
           </div>
         </section>

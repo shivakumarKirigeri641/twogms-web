@@ -6,9 +6,31 @@ import {
   addloginCredentials,
   removeloginCredentials,
 } from "../store/slices/loginCredentialsSlice";
+import {
+  addallStaffsDetails,
+  removeallStaffsDetails,
+} from "../store/slices/allStaffsDetailsSlice";
+import {
+  addallVehicles,
+  removeallVehicles,
+} from "../store/slices/allVehiclesSlice";
+import {
+  addserviceChargeDetails,
+  removeserviceChargeDetails,
+} from "../store/slices/serviceChargeDetailsSlice";
+import {
+  addwalletBalance,
+  removewalletBalance,
+} from "../store/slices/walletBalanceSlice";
+
+import {
+  addloginCredentials,
+  removeloginCredentials,
+} from "../store/slices/loginCredentialsSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { removeservicingVehicles } from "../store/slices/servicingVehiclesSlice";
+import { removeservicedVehicles } from "../store/slices/servicedVehiclesSlice";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -22,6 +44,11 @@ export default function Login() {
   useEffect(() => {
     dispatch(removeloginCredentials());
     dispatch(removeservicingVehicles());
+    dispatch(removeservicedVehicles());
+    dispatch(removeallStaffsDetails());
+    dispatch(removeallVehicles());
+    dispatch(removeserviceChargeDetails());
+    dispatch(removewalletBalance());
   }, []);
   const handleGetOtp = async () => {
     /*if (!validateMobile(mobile)) {
@@ -44,7 +71,28 @@ export default function Login() {
           withCredentials: true,
         }
       );
+      const result_staffs = await axios.get(
+        SERVER + "/twogms/all-staffs-details",
+        { withCredentials: true }
+      );
+      const result_serviceCharges = await axios.get(
+        SERVER + "/twogms/service-charge-details",
+        { withCredentials: true }
+      );
+      const result_allVehicles = await axios.get(
+        SERVER + "/twogms/get-vehicles",
+        { withCredentials: true }
+      );
+      const result_walletBalance = await axios.get(
+        SERVER + "/twogms/wallet-balance",
+        { withCredentials: true }
+      );
+
       dispatch(addloginCredentials(result?.data?.data));
+      dispatch(addallStaffsDetails(result_staffs?.data?.data));
+      dispatch(addallVehicles(result_allVehicles?.data?.data));
+      dispatch(addserviceChargeDetails(result_serviceCharges?.data?.data));
+      dispatch(addwalletBalance(result_walletBalance?.data?.data));
       navigate("/");
     } catch (err) {
       if (401 === err.statusCode) {
