@@ -43,6 +43,24 @@ export default function EditService({
   onClose,
   onSubmit,
 }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const loginCredentials = useSelector((store) => store.loginCredentials);
+  const allStaffsDetails = useSelector((store) => store.allStaffsDetails);
+  const serviceChargeDetails = useSelector(
+    (store) => store.serviceChargeDetails
+  );
+  console.log(serviceChargeDetails?.standardServiceChargesData);
+  useEffect(() => {
+    if (!loginCredentials) {
+      navigate("/twogms/login");
+    }
+    setStaffList(allStaffsDetails);
+    setStandardServices(serviceChargeDetails?.standardServiceChargesData?.list);
+    //setWashingCharges(serviceChargeDetails?.washingServiceChargesData);
+    //setpickupServiceCharges();
+    //setdropServiceCharges();
+  }, []);
   // mode = 'add' or 'edit'
   // vehicleData for 'edit' mode, nullable for 'add'
 
@@ -109,8 +127,6 @@ export default function EditService({
   );
 
   // Billing details (fetched and composed)
-  const [standardServices, setStandardServices] = useState([]);
-  const [selectedStdServices, setSelectedStdServices] = useState([]);
   const [labourCharges, setLabourCharges] = useState(
     vehicleData?.labourCharges || 0
   );
@@ -136,24 +152,8 @@ export default function EditService({
   const brandBoxRef = useRef(null);
 
   // --- Effects ---
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const loginCredentials = useSelector((store) => store.loginCredentials);
-  const allStaffsDetails = useSelector((store) => store.allStaffsDetails);
-  const serviceChargeDetails = useSelector(
-    (store) => store.serviceChargeDetails
-  );
-  useEffect(() => {
-    if (!loginCredentials) {
-      navigate("/twogms/login");
-    }
-    setStaffList(allStaffsDetails);
-    //setStandardServices(serviceChargeDetails?.standardServiceChargesData?.list);
-    //setWashingCharges(serviceChargeDetails?.washingServiceChargesData);
-    //setpickupServiceCharges();
-    //setdropServiceCharges();
-  }, []);
-
+  const [standardServices, setStandardServices] = useState([]);
+  const [selectedStdServices, setSelectedStdServices] = useState([]);
   // Autosuggest for brand model input
   useEffect(() => {
     if (brandInputFocused && brandModel.trim().length > 0) {
@@ -462,18 +462,18 @@ export default function EditService({
   }
 
   // Standard service selection in billing (checkboxes)
-  function onToggleStdService(id) {
+  const onToggleStdService = (_id, index) => {
     setSelectedStdServices((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+      prev.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id]
     );
-  }
+  };
 
   // Calculations for billing summary
   const partsTotalAmount = parts.reduce((sum, p) => sum + p.amount, 0);
   const partsTotalCGST = parts.reduce((sum, p) => sum + p.cGST, 0);
   const partsTotalSGST = parts.reduce((sum, p) => sum + p.sGST, 0);
   const stdServiceAmount = standardServices
-    .filter((svc) => selectedStdServices.includes(svc._id))
+    .filter((svc) => svc?.isChecked === true)
     .reduce(
       (sum, svc) =>
         sum + (svc?.amount + (svc?.amount * (svc?.cGST + svc?.sGST)) / 100),
@@ -1241,11 +1241,11 @@ export default function EditService({
           {/* Standard Services */}
           <div className="mb-4">
             <p className="font-semibold mb-2">Standard Services</p>
-            {standardServices?.list?.length === 0 ? (
+            {standardServices?.length === 0 ? (
               <p>Loading services...</p>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                {standardServices?.list?.map((svc) => (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs/tight">
+                {standardServices?.map((svc, index) => (
                   <label
                     key={svc?._id}
                     className="inline-flex items-center cursor-pointer"
@@ -1253,15 +1253,15 @@ export default function EditService({
                     <input
                       type="checkbox"
                       checked={selectedStdServices.includes(svc?._id)}
-                      onChange={() => onToggleStdService(svc?.id)}
+                      onChange={() => onToggleStdService(svc?._id, index)}
                       className="form-checkbox h-5 w-5 text-indigo-600"
                     />
                     <span className="ml-2">
                       {svc?.title} - ₹
-                      {svc?.amount?.toFixed(2) +
-                        (svc?.amount?.toFixed(2) *
-                          (svc?.cGST?.toFixed(2) + svc?.sGST?.toFixed(2))) /
-                          100}
+                      <span className="font-bold text-blue-800">
+                        {svc?.amount +
+                          (svc?.amount * (svc?.cGST + svc?.sGST)) / 100}
+                      </span>
                     </span>
                   </label>
                 ))}
