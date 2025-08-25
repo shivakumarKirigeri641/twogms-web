@@ -486,7 +486,10 @@ export default function EditService({
     //console.log(updated);
   };
   // Calculations for billing summary
-  const partsTotalAmount = parts.reduce((sum, p) => sum + p.amount, 0);
+  const partsTotalAmount = parts.reduce(
+    (sum, p) => sum + p.amount + (p.amount * (p.cGST + p.sGST)) / 100,
+    0
+  );
   const partsTotalCGST = parts.reduce((sum, p) => sum + p.cGST, 0);
   const partsTotalSGST = parts.reduce((sum, p) => sum + p.sGST, 0);
   const stdServiceAmount = standardServices
@@ -1559,8 +1562,8 @@ export default function EditService({
               )}
               {parts.map((p, idx) => (
                 <li key={idx}>
-                  {p.title}: ₹{p.amount.toFixed(2)} + cGST ₹{p.cGST.toFixed(2)}{" "}
-                  + sGST ₹{p.sGST.toFixed(2)}
+                  {p.title}: ₹{p.amount} + {p.cGST}% (cGST) + {p.cGST}% (sGST) =
+                  ₹{p.amount + (p.amount * (p.cGST + p.sGST)) / 100}
                 </li>
               ))}
             </ul>
@@ -1576,14 +1579,6 @@ export default function EditService({
             <div className="flex justify-between">
               <span>Parts Amount</span>
               <span>₹{partsTotalAmount}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Total cGST</span>
-              <span>₹{partsTotalCGST}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Total sGST</span>
-              <span>₹{partsTotalSGST.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span>Standard Services</span>
