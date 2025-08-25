@@ -37,12 +37,7 @@ let brandModelsList = [
   "Ford Endeavour",
 ];
 
-export default function EditService({
-  mode = "add",
-  vehicleData = null,
-  onClose,
-  onSubmit,
-}) {
+export default function EditService({ mode = "add", vehicleData = null }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginCredentials = useSelector((store) => store.loginCredentials);
@@ -85,6 +80,9 @@ export default function EditService({
   const [kmDriven, setKmDriven] = useState(vehicleData?.kmDriven ?? "");
   const [vehicleInDate, setVehicleInDate] = useState(
     vehicleData?.vehicleInDate || todayISO
+  );
+  const [vehicleNextServiceDate, setvehicleNextServiceDate] = useState(
+    vehicleData?.vehicleNextServiceDate || todayISO
   );
 
   // Customer Details
@@ -146,7 +144,7 @@ export default function EditService({
     vehicleData?.deliveryDate || vehicleInDate
   );
   const [nextServiceDate, setNextServiceDate] = useState(
-    vehicleData?.nextServiceDate || ""
+    vehicleData?.nextServiceDate || vehicleNextServiceDate
   );
 
   // Error states
@@ -208,8 +206,8 @@ export default function EditService({
   }
 
   function validateFuel(value) {
-    if (!(value >= 0 && value <= 100))
-      return "Fuel at service must be between 0% and 100%";
+    if (!(value >= 1 && value <= 100))
+      return "Fuel at service must be between 1% and 100%";
     return "";
   }
 
@@ -286,9 +284,6 @@ export default function EditService({
 
     err = validateMobileNumber(mobileNumber);
     if (err) newErrors.mobileNumber = err;
-
-    err = validateEmail(email);
-    if (err) newErrors.email = err;
 
     err = validateAltMobileNumber(altMobileNumber);
     if (err) newErrors.altMobileNumber = err;
@@ -526,6 +521,10 @@ export default function EditService({
 
   // --- Button handlers ---
   function handleSubmit() {
+    if (staffAssignments?.length === 0) {
+      alert("Please assign the staff to work on vehicle!");
+      return;
+    }
     if (!validateAll()) return;
 
     // Compose final data payload
@@ -537,8 +536,6 @@ export default function EditService({
       vehicleInDate,
       customerName,
       mobileNumber,
-      email,
-      address,
       altMobileNumber,
       complaints,
       observations,
@@ -546,15 +543,19 @@ export default function EditService({
       staffAssignments,
       pickupCharges,
       dropCharges,
-      selectedStdServices,
+      standardServices,
       labourCharges,
       washingCharges,
       deliveryDate,
       nextServiceDate,
+      staffAssignments,
     };
-
-    if (onSubmit) onSubmit(payload);
+    console.log("data is good/1", payload);
+    navigate(-1);
   }
+  const onClose = () => {
+    navigate(-1);
+  };
   const CheckAndFillCustomerDetails = async (e) => {
     setCustomerName("");
     setMobileNumber("");
@@ -747,7 +748,7 @@ export default function EditService({
                 <ul className="absolute z-20 w-full max-h-40 overflow-auto bg-white border border-gray-300 rounded shadow mt-1">
                   {brandSuggestions?.map((suggestion) => (
                     <li
-                      key={suggestion}
+                      key={suggestion._id}
                       className="px-3 py-2 cursor-pointer hover:bg-indigo-600 hover:text-white"
                       onMouseDown={(e) => {
                         e.preventDefault();
@@ -1646,13 +1647,17 @@ export default function EditService({
               Next Service Date (optional)
             </label>
             <input
-              id="nextServiceDate"
               type="date"
-              value={nextServiceDate}
-              min={deliveryDate}
+              value={vehicleNextServiceDate}
+              onChange={(e) => setvehicleNextServiceDate(e.target.value)}
+              min={vehicleInDate}
               max="2099-12-31"
-              onChange={(e) => setNextServiceDate(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors ${
+                errors.vehicleNextServiceDate
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
+              aria-describedby="error-deliveryDate"
             />
           </div>
         </section>
