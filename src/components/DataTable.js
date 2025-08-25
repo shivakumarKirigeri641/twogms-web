@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Pencil, RefreshCw, Search } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
@@ -34,7 +36,9 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
     (page - 1) * rowsPerPage,
     page * rowsPerPage
   );
-
+  const handleEditClick = (row) => {
+    navigate("/twogms/edit-service/" + row?._id);
+  };
   return (
     <div className="space-y-4 w-full">
       {/* 🔍 Search + Rows per page */}
@@ -93,7 +97,7 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
             {paginatedData?.length > 0 ? (
               paginatedData?.map((row, index) => (
                 <motion.tr
-                  key={row.id}
+                  key={row._id}
                   className="hover:bg-gray-50 transition-colors"
                   transition={{ delay: index * 0.05 }}
                 >
@@ -128,7 +132,12 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
                     </span>
                   </td>
                   <td className="px-4 py-3 flex justify-center gap-2">
-                    <button className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500 text-gray-200 rounded-xl hover:bg-gray-200 transition font-bold">
+                    <button
+                      className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500 text-gray-200 rounded-xl transition font-bold  cursor-pointer"
+                      onClick={() => {
+                        handleEditClick(row);
+                      }}
+                    >
                       <Pencil className="w-4 h-4" /> Edit
                     </button>
                   </td>
@@ -153,7 +162,7 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
         {paginatedData?.length > 0 ? (
           paginatedData.map((row, index) => (
             <motion.div
-              key={row.id}
+              key={row._id}
               className="border rounded-xl p-4 shadow-sm bg-white space-y-2"
               transition={{ delay: index * 0.05 }}
             >
@@ -191,7 +200,12 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
                 </span>
               </div>
               <div className="flex gap-2 pt-2">
-                <button className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500  rounded-xl hover:bg-gray-200 transition text-gray-200 font-bold">
+                <button
+                  className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500  rounded-xl hover:bg-gray-200 transition font-bold cursor-pointer"
+                  onClick={() => {
+                    handleEditClick(row);
+                  }}
+                >
                   <Pencil className="w-4 h-4" /> Edit
                 </button>
               </div>
