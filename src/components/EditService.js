@@ -49,7 +49,7 @@ export default function EditService({
   const allStaffsDetails = useSelector((store) => store.allStaffsDetails);
   const allVehicles = useSelector((store) => store.allVehicles);
   brandModelsList = allVehicles?.map((x) => x.fkTwoWheelerDataId?.variantName);
-  console.log("brandlist", allVehicles);
+  //console.log("brandlist", allVehicles);
   const serviceChargeDetails = useSelector(
     (store) => store.serviceChargeDetails
   );
@@ -309,10 +309,10 @@ export default function EditService({
 
   // Complaints
   function onAddComplaint() {
-    if (!complaintTitle.trim()) {
+    /*if (!complaintTitle.trim()) {
       alert("Complaint title is required");
       return;
-    }
+    }*/
     if (complaintEdit !== null) {
       // Edit mode
       setComplaints(
@@ -334,7 +334,7 @@ export default function EditService({
   }
   function onEditComplaint(idx) {
     const c = complaints[idx];
-    setComplaintTitle(c.title);
+    //setComplaintTitle(c.title);
     setComplaintDescription(c.description);
     setComplaintEdit(idx);
   }
@@ -464,17 +464,27 @@ export default function EditService({
   // Staff assignments selection handler (multiselect by checkboxes)
   function onToggleStaff(_id) {
     setStaffAssignments((prev) =>
-      prev.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id]
+      prev?.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id]
     );
   }
 
   // Standard service selection in billing (checkboxes)
-  const onToggleStdService = (_id, index) => {
-    setSelectedStdServices((prev) =>
-      prev.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id]
+  /*const onToggleStdService = (_id, index) => {
+    setSelectedStdServices((prev) => {
+      prev?.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id];
+    });
+    console.log("selected std service:", selectedStdServices);
+  };*/
+  const onToggleStdService = (id, index) => {
+    const updated = standardServices?.map((service, myindex) =>
+      myindex === index
+        ? { ...service, isChecked: !service.isChecked }
+        : service
     );
+    //standardServices[index].isChecked = !standardServices[index].isChecked;
+    setStandardServices(updated);
+    //console.log(updated);
   };
-
   // Calculations for billing summary
   const partsTotalAmount = parts.reduce((sum, p) => sum + p.amount, 0);
   const partsTotalCGST = parts.reduce((sum, p) => sum + p.cGST, 0);
@@ -544,6 +554,8 @@ export default function EditService({
   }
   const CheckAndFillCustomerDetails = async (e) => {
     setCustomerName("");
+    setMobileNumber("");
+    setAltMobileNumber("");
     if (7 <= vehicleNumber.length) {
       try {
         const result = await axios.get(SERVER + "/twogms/search-vehicle/" + e, {
@@ -988,6 +1000,7 @@ export default function EditService({
 
             {/* Add/Edit form */}
             <div className="bg-gray-50 p-4 rounded shadow-inner">
+              {/*
               <input
                 type="text"
                 placeholder="Complaint Title"
@@ -996,6 +1009,7 @@ export default function EditService({
                 onChange={(e) => setComplaintTitle(e.target.value)}
                 aria-label="Complaint title"
               />
+              */}
               <textarea
                 placeholder="Complaint Description"
                 className="w-full border border-gray-300 rounded px-3 py-1 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
@@ -1268,7 +1282,7 @@ export default function EditService({
                 >
                   <input
                     type="checkbox"
-                    checked={staffAssignments.includes(staff?._id)}
+                    checked={staffAssignments?.includes(staff?._id)}
                     onChange={() => onToggleStaff(staff?._id)}
                     className="form-checkbox h-5 w-5 text-indigo-600"
                   />
@@ -1294,7 +1308,7 @@ export default function EditService({
 
           {/* Standard Services */}
           <div className="mb-4">
-            <p className="font-semibold mb-2">Standard Services</p>
+            <p className="font-semibold m-2">Standard Services</p>
             {standardServices?.length === 0 ? (
               <p>Loading services...</p>
             ) : (
@@ -1306,7 +1320,9 @@ export default function EditService({
                   >
                     <input
                       type="checkbox"
-                      checked={selectedStdServices.includes(svc?._id)}
+                      //checked={selectedStdServices?.includes(svc?._id)}
+                      //onChange={() => onToggleStdService(svc?._id, index)}
+                      checked={svc?.isChecked}
                       onChange={() => onToggleStdService(svc?._id, index)}
                       className="form-checkbox h-5 w-5 text-indigo-600"
                     />
