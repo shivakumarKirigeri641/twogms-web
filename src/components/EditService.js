@@ -390,7 +390,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   function onEditComplaint(idx) {
     const c = complaints[idx];
     //setComplaintTitle(c.title);
-    setComplaintDescription(c.description);
+    setComplaintDescription(c?.description);
     setComplaintEdit(idx);
   }
   function onDeleteComplaint(idx) {
@@ -428,8 +428,8 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   }
   function onEditObservation(idx) {
     const o = observations[idx];
-    setObservationTitle(o.title);
-    setObservationDescription(o.description);
+    setObservationTitle(o?.title);
+    setObservationDescription(o?.description);
     setObservationEdit(idx);
   }
   function onDeleteObservation(idx) {
@@ -443,7 +443,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
 
   // Parts and accessories
   function onAddPart() {
-    if (!partTitle.trim()) {
+    if (!partTitle?.trim()) {
       alert("Part title is required");
       return;
     }
@@ -497,8 +497,8 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   }
   function onEditPart(idx) {
     const p = parts[idx];
-    setPartTitle(p.title);
-    setPartDescription(p.description);
+    setPartTitle(p?.title);
+    setPartDescription(p?.description);
     setPartAmount(p.amount);
     setPartCGST(p.cGST);
     setPartSGST(p.sGST);
@@ -547,18 +547,23 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   );
   const partsTotalCGST = parts.reduce((sum, p) => sum + p.cGST, 0);
   const partsTotalSGST = parts.reduce((sum, p) => sum + p.sGST, 0);
-  const stdServiceAmount = standardServices
-    .filter((svc) => svc?.isChecked === true)
-    .reduce(
-      (sum, svc) =>
-        sum +
-        (svc?.amountSummary[svc?.amountSummary.length - 1].amount +
-          (svc?.amountSummary[svc?.amountSummary.length - 1].amount *
-            (svc?.amountSummary[svc?.amountSummary.length - 1].cGST +
-              svc?.amountSummary[svc?.amountSummary.length - 1].sGST)) /
-            100),
-      0
-    );
+  const stdServiceAmount =
+    false === standardServices?.isBaseLineService
+      ? standardServices
+          .filter((svc) => svc?.isChecked === true)
+          .reduce(
+            (sum, svc) =>
+              sum +
+              (svc?.amountSummary[svc?.amountSummary.length - 1].amount +
+                (svc?.amountSummary[svc?.amountSummary.length - 1].amount *
+                  (svc?.amountSummary[svc?.amountSummary.length - 1].cGST +
+                    svc?.amountSummary[svc?.amountSummary.length - 1].sGST)) /
+                  100),
+            0
+          )
+      : standardServices
+          ?.filter((svc) => svc?.isChecked === true)
+          .reduce((sum, svc) => sum + svc?.amount, 0);
 
   const billingTotal =
     partsTotalAmount +
@@ -986,9 +991,9 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                 className="border rounded px-4 py-2 flex justify-between items-center bg-gray-50 shadow-sm"
               >
                 <div>
-                  <p className="font-semibold">{c.title}</p>
-                  {c.description && (
-                    <p className="text-gray-600 text-sm">{c.description}</p>
+                  <p className="font-semibold">{c?.title}</p>
+                  {c?.description && (
+                    <p className="text-gray-600 text-sm">{c?.description}</p>
                   )}
                 </div>
                 <div className="space-x-2">
@@ -996,7 +1001,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     className="text-indigo-600 hover:text-indigo-900"
                     onClick={() => onEditComplaint(idx)}
                     title="Edit Complaint"
-                    aria-label={`Edit complaint titled ${c.title}`}
+                    aria-label={`Edit complaint titled ${c?.title}`}
                   >
                     ✎
                   </button>
@@ -1004,7 +1009,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     className="text-red-600 hover:text-red-900"
                     onClick={() => onDeleteComplaint(idx)}
                     title="Delete Complaint"
-                    aria-label={`Delete complaint titled ${c.title}`}
+                    aria-label={`Delete complaint titled ${c?.title}`}
                   >
                     🗑
                   </button>
@@ -1071,9 +1076,9 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                 className="border rounded px-4 py-2 flex justify-between items-center bg-gray-50 shadow-sm"
               >
                 <div>
-                  <p className="font-semibold">{o.title}</p>
-                  {o.description && (
-                    <p className="text-gray-600 text-sm">{o.description}</p>
+                  <p className="font-semibold">{o?.title}</p>
+                  {o?.description && (
+                    <p className="text-gray-600 text-sm">{o?.description}</p>
                   )}
                 </div>
                 <div className="space-x-2">
@@ -1081,7 +1086,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     className="text-indigo-600 hover:text-indigo-900"
                     onClick={() => onEditObservation(idx)}
                     title="Edit Observation"
-                    aria-label={`Edit observation titled ${o.title}`}
+                    aria-label={`Edit observation titled ${o?.title}`}
                   >
                     ✎
                   </button>
@@ -1089,7 +1094,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     className="text-red-600 hover:text-red-900"
                     onClick={() => onDeleteObservation(idx)}
                     title="Delete Observation"
-                    aria-label={`Delete observation titled ${o.title}`}
+                    aria-label={`Delete observation titled ${o?.title}`}
                   >
                     🗑
                   </button>
@@ -1156,9 +1161,9 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                 className="border rounded px-4 py-2 flex justify-between items-center bg-gray-50 shadow-sm flex-wrap gap-2"
               >
                 <div className="flex-grow min-w-[200px]">
-                  <p className="font-semibold">{p.title}</p>
-                  {p.description && (
-                    <p className="text-gray-600 text-sm">{p.description}</p>
+                  <p className="font-semibold">{p?.title}</p>
+                  {p?.description && (
+                    <p className="text-gray-600 text-sm">{p?.description}</p>
                   )}
                   <p className="text-sm text-gray-700 mt-1">
                     Amount: ₹{p.amount.toFixed(2)} | cGST: ₹{p.cGST.toFixed(2)}{" "}
@@ -1170,7 +1175,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     className="text-indigo-600 hover:text-indigo-900"
                     onClick={() => onEditPart(idx)}
                     title="Edit Part"
-                    aria-label={`Edit part titled ${p.title}`}
+                    aria-label={`Edit part titled ${p?.title}`}
                   >
                     ✎
                   </button>
@@ -1178,7 +1183,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     className="text-red-600 hover:text-red-900"
                     onClick={() => onDeletePart(idx)}
                     title="Delete Part"
-                    aria-label={`Delete part titled ${p.title}`}
+                    aria-label={`Delete part titled ${p?.title}`}
                   >
                     🗑
                   </button>
@@ -1334,24 +1339,46 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                   >
                     <input
                       type="checkbox"
+                      disabled={
+                        !standardServices?.isBaseLineService ||
+                        false === standardServices?.isBaseLineService
+                          ? false
+                          : true
+                      }
                       //checked={selectedStdServices?.includes(svc?._id)}
                       //onChange={() => onToggleStdService(svc?._id, index)}
-                      checked={svc?.isChecked}
+                      checked={
+                        !standardServices?.isBaseLineService ||
+                        false === standardServices?.isBaseLineService
+                          ? svc?.isChecked
+                          : true
+                      }
                       onChange={() => onToggleStdService(svc?._id, index)}
                       className="form-checkbox h-5 w-5 text-indigo-600"
                     />
                     <span className="ml-2">
                       {svc?.title} - ₹
                       <span className="font-bold text-blue-800">
-                        {svc?.amountSummary[svc?.amountSummary.length - 1]
-                          .amount +
-                          (svc?.amountSummary[svc?.amountSummary.length - 1]
-                            .amount *
-                            (svc?.amountSummary[svc?.amountSummary.length - 1]
-                              .cGST +
-                              svc?.amountSummary[svc?.amountSummary.length - 1]
-                                .sGST)) /
-                            100}
+                        {false === standardServices?.isBaseLineService
+                          ? svc?.amountSummary[svc?.amountSummary.length - 1]
+                              .amount
+                          : svc?.amount +
+                            (false === standardServices?.isBaseLineService
+                              ? svc?.amountSummary[
+                                  svc?.amountSummary.length - 1
+                                ].amount
+                              : svc?.amount *
+                                (false === standardServices?.isBaseLineService
+                                  ? svc?.amountSummary[
+                                      svc?.amountSummary.length - 1
+                                    ].cGST
+                                  : svc?.cGST + false ===
+                                    standardServices?.isBaseLineService
+                                  ? svc?.amountSummary[
+                                      svc?.amountSummary.length - 1
+                                    ].sGST
+                                  : svc?.sGST)) /
+                              100}
                       </span>
                     </span>
                   </label>
@@ -1580,8 +1607,8 @@ export default function EditService({ mode = "add", vehicleData = null }) {
               )}
               {parts.map((p, idx) => (
                 <li key={idx}>
-                  {p.title}: ₹{p.amount} + {p.cGST}% (cGST) + {p.cGST}% (sGST) =
-                  ₹{p.amount + (p.amount * (p.cGST + p.sGST)) / 100}
+                  {p?.title}: ₹{p.amount} + {p.cGST}% (cGST) + {p.cGST}% (sGST)
+                  = ₹{p.amount + (p.amount * (p.cGST + p.sGST)) / 100}
                 </li>
               ))}
             </ul>
