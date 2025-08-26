@@ -1724,7 +1724,17 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                 Save Service
               </button>
             )}
-            {serviceid && (
+            {serviceid && false === vehicleData?.serviceStatus && (
+              <button
+                onClick={handleSaveService}
+                className="px-6 py-2 bg-blue-600 hover:bg-indigo-700 text-white rounded shadow transition flex text-center mr-2"
+                type="button"
+              >
+                <SaveAllIcon className="mx-2" />
+                Repeat service
+              </button>
+            )}
+            {serviceid && vehicleData?.serviceStatus && (
               <button
                 onClick={handleSaveService}
                 className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow transition flex text-center"
