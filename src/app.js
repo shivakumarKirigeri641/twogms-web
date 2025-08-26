@@ -37,6 +37,10 @@ const appRouter = createBrowserRouter([
         element: <Logout />,
       },
       {
+        path: "/twogms/edit-service/:serviceid",
+        element: <EditService />,
+      },
+      {
         path: "/twogms/edit-service",
         element: <EditService />,
       },

@@ -6,12 +6,14 @@ import { useEffect } from "react";
 import { addservicedVehicles } from "../store/slices/servicedVehiclesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { removeeditServicingVehicle } from "../store/slices/editServicingVehicleSlice";
 const ServicedVehicles = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const servicedVehicles = useSelector((store) => store.servicedVehicles);
   const loginCredentials = useSelector((store) => store.loginCredentials);
   useEffect(() => {
+    dispatch(removeeditServicingVehicle());
     if (!loginCredentials) {
       navigate("/twogms/login");
     }
