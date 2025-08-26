@@ -132,7 +132,10 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   const [partSGST, setPartSGST] = useState("");
 
   // Staff Assignments (fetched from API)
-  const [staffList, setStaffList] = useState([]);
+  const [staffList, setStaffList] = useState(
+    allStaffsDetails.map((x) => x.staffName)
+  );
+  console.log("staffs assigned:", vehicleData?.fkAssignedStaffsDataId?.staffs);
   const [staffAssignments, setStaffAssignments] = useState(
     serviceid
       ? vehicleData?.fkAssignedStaffsDataId?.staffs?.map(
@@ -518,27 +521,20 @@ export default function EditService({ mode = "add", vehicleData = null }) {
 
   // Staff assignments selection handler (multiselect by checkboxes)
   function onToggleStaff(_id) {
-    setStaffAssignments((prev) =>
-      prev?.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id]
+    const updated = staffList?.map((service, myindex) =>
+      myindex === index
+        ? { ...service, isChecked: !service.isChecked }
+        : service
     );
+    setStaffAssignments(updated);
   }
-
-  // Standard service selection in billing (checkboxes)
-  /*const onToggleStdService = (_id, index) => {
-    setSelectedStdServices((prev) => {
-      prev?.includes(_id) ? prev.filter((sid) => sid !== _id) : [...prev, _id];
-    });
-    console.log("selected std service:", selectedStdServices);
-  };*/
   const onToggleStdService = (id, index) => {
     const updated = standardServices?.map((service, myindex) =>
       myindex === index
         ? { ...service, isChecked: !service.isChecked }
         : service
     );
-    //standardServices[index].isChecked = !standardServices[index].isChecked;
     setStandardServices(updated);
-    //console.log(updated);
   };
   // Calculations for billing summary
   const partsTotalAmount = parts.reduce(
@@ -686,7 +682,9 @@ export default function EditService({ mode = "add", vehicleData = null }) {
     >
       <div className="max-w-7xl mx-auto bg-white p-6 rounded-md shadow-lg font-sans text-gray-800 selection:bg-indigo-400 selection:text-white">
         <header className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Edit Vehicle Service</h1>
+          <h1 className="text-2xl font-bold">
+            Edit Vehicle Service ({serviceid})
+          </h1>
           <button
             onClick={onClose}
             className="text-red-600 hover:text-red-800 font-semibold transition-colors duration-300"
