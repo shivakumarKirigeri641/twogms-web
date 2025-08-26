@@ -1,10 +1,20 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { SERVER } from "../utils/constants";
 import { motion } from "framer-motion";
 import { Pencil, RefreshCw, Search } from "lucide-react";
 import { useNavigate } from "react-router";
-
+import {
+  addeditServicingVehicle,
+  removeeditServicingVehicle,
+} from "../store/slices/editServicingVehicleSlice";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
+  useEffect(() => {
+    dispatch(removeeditServicingVehicle());
+  }, []);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
@@ -36,7 +46,12 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
     (page - 1) * rowsPerPage,
     page * rowsPerPage
   );
-  const handleEditClick = (row) => {
+  const handleEditClick = async (row) => {
+    const result = await axios.get(
+      SERVER + "/twogms/servicing-vehicle/" + row?._id,
+      { withCredentials: true }
+    );
+    dispatch(addeditServicingVehicle(result?.data?.data));
     navigate("/twogms/edit-service/" + row?._id);
   };
   return (

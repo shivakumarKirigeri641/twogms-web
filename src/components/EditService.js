@@ -1,5 +1,4 @@
 import axios from "axios";
-import { SERVER } from "../utils/constants";
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
@@ -46,7 +45,8 @@ let brandModelsList = [
 
 export default function EditService({ mode = "add", vehicleData = null }) {
   const { serviceid } = useParams();
-  const dispatch = useDispatch();
+  vehicleData = useSelector((store) => store.editServicingVehicle);
+  console.log(vehicleData);
   const navigate = useNavigate();
   const loginCredentials = useSelector((store) => store.loginCredentials);
   const allStaffsDetails = useSelector((store) => store.allStaffsDetails);
@@ -63,9 +63,6 @@ export default function EditService({ mode = "add", vehicleData = null }) {
     }
     setStaffList(allStaffsDetails);
     setStandardServices(serviceChargeDetails?.standardServiceChargesData?.list);
-    //setWashingCharges(serviceChargeDetails?.washingServiceChargesData);
-    //setpickupServiceCharges();
-    //setdropServiceCharges();
   }, []);
   // mode = 'add' or 'edit'
   // vehicleData for 'edit' mode, nullable for 'add'
@@ -77,7 +74,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
 
   // Vehicle Details
   const [vehicleNumber, setVehicleNumber] = useState(
-    vehicleData?.vehicleNumber || ""
+    vehicleData?.fkVehicleDataId?.vehicleNumber || ""
   );
   const [brandModel, setBrandModel] = useState(vehicleData?.brandModel || "");
   const [brandInputFocused, setBrandInputFocused] = useState(false);
@@ -671,7 +668,6 @@ export default function EditService({ mode = "add", vehicleData = null }) {
       : setdropCharges(0);
   };
   // --- Render ---
-
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-fixed px-4 text-black"

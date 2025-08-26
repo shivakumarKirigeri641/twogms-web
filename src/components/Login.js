@@ -6,6 +6,7 @@ import {
   addloginCredentials,
   removeloginCredentials,
 } from "../store/slices/loginCredentialsSlice";
+import { removeeditServicingVehicle } from "../store/slices/editServicingVehicleSlice";
 import {
   addallStaffsDetails,
   removeallStaffsDetails,
@@ -49,6 +50,7 @@ export default function Login() {
     dispatch(removeallVehicles());
     dispatch(removeserviceChargeDetails());
     dispatch(removewalletBalance());
+    dispatch(removeeditServicingVehicle());
   }, []);
   const handleGetOtp = async () => {
     /*if (!validateMobile(mobile)) {
