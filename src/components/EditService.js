@@ -2,7 +2,14 @@ import axios from "axios";
 import { SERVER } from "../utils/constants";
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import {
+  CastIcon,
+  CatIcon,
+  SaveAllIcon,
+  SaveIcon,
+  SunIcon,
+} from "lucide-react";
 
 // --- Mock APIs ---
 const fetchStaff = () =>
@@ -38,6 +45,7 @@ let brandModelsList = [
 ];
 
 export default function EditService({ mode = "add", vehicleData = null }) {
+  const { serviceid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginCredentials = useSelector((store) => store.loginCredentials);
@@ -520,6 +528,9 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   }, [showErrorPopOver]);
 
   // --- Button handlers ---
+  const handleSaveService = () => {
+    console.log("handle save");
+  };
   function handleSubmit() {
     if (staffAssignments?.length === 0) {
       alert("Please assign the staff to work on vehicle!");
@@ -1666,28 +1677,42 @@ export default function EditService({ mode = "add", vehicleData = null }) {
         <footer className="flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="px-6 py-2 border border-gray-400 rounded text-gray-700 hover:bg-gray-100 transition"
+            className="px-6 py-2 border border-gray-400 rounded text-gray-700 hover:bg-gray-100 transition bg-orange-300"
             type="button"
           >
             Close
           </button>
-          {mode === "add" ? (
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow transition"
-              type="button"
-            >
-              Start Service
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded shadow transition"
-              type="button"
-            >
-              Complete Service
-            </button>
-          )}
+          <div className="md:flex justify-between">
+            {serviceid && (
+              <button
+                onClick={handleSaveService}
+                className="px-6 py-2 bg-blue-600 hover:bg-indigo-700 text-white rounded shadow transition flex text-center mr-2"
+                type="button"
+              >
+                <SaveAllIcon className="mx-2" />
+                Save Service
+              </button>
+            )}
+            {serviceid && (
+              <button
+                onClick={handleSaveService}
+                className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow transition flex text-center"
+                type="button"
+              >
+                <SunIcon className="mx-2" />
+                Finish service
+              </button>
+            )}
+            {!serviceid && (
+              <button
+                onClick={handleSubmit}
+                className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow transition flex text-center"
+                type="button"
+              >
+                Start Service
+              </button>
+            )}
+          </div>
         </footer>
 
         {/* Animations */}
