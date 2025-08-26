@@ -91,6 +91,7 @@ export default function Login() {
       );
 
       dispatch(addloginCredentials(result?.data?.data));
+      console.log(result?.data?.data);
       dispatch(addallStaffsDetails(result_staffs?.data?.data));
       dispatch(addallVehicles(result_allVehicles?.data?.data));
       dispatch(addserviceChargeDetails(result_serviceCharges?.data?.data));

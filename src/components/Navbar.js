@@ -136,7 +136,8 @@ export default function Navbar({ role = "owner", ownerName = "Shivakumar" }) {
 
           {/* Bottom Part */}
           <div className="bg-blue-50 px-4 py-2 text-gray-700 font-medium">
-            Welcome, <span className="text-blue-600">{ownerName}</span>
+            Welcome,{" "}
+            <span className="text-blue-600">{loginCredentials?.staffName}</span>
           </div>
 
           {/* Mobile Menu Drawer */}

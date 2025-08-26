@@ -52,6 +52,7 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
       { withCredentials: true }
     );
     dispatch(addeditServicingVehicle(result?.data?.data));
+    console.log(row?._id);
     navigate("/twogms/edit-service/" + row?._id);
   };
   return (

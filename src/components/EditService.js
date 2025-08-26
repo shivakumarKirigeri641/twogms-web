@@ -84,7 +84,7 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   );
   const [kmDriven, setKmDriven] = useState(vehicleData?.kmDriven ?? "");
   const [vehicleInDate, setVehicleInDate] = useState(
-    vehicleData?.vehicleInDate || todayISO
+    vehicleData?.vehicleInDate?.slice(0, 10) || todayISO
   );
   const [vehicleNextServiceDate, setvehicleNextServiceDate] = useState(
     vehicleData?.vehicleNextServiceDate || todayISO
@@ -92,33 +92,38 @@ export default function EditService({ mode = "add", vehicleData = null }) {
 
   // Customer Details
   const [customerName, setCustomerName] = useState(
-    vehicleData?.customerName || ""
+    vehicleData?.fkVehicleDataId?.fkCustomerDataId?.customerName || ""
   );
   const [mobileNumber, setMobileNumber] = useState(
-    vehicleData?.mobileNumber || ""
+    vehicleData?.fkVehicleDataId?.fkCustomerDataId?.customerMobileNumber || ""
   );
   const [email, setEmail] = useState(vehicleData?.email || "");
   const [address, setAddress] = useState(vehicleData?.address || "");
   const [altMobileNumber, setAltMobileNumber] = useState(
-    vehicleData?.altMobileNumber || ""
+    vehicleData?.fkVehicleDataId?.fkCustomerDataId?.customerAltMobileNumber ||
+      ""
   );
 
   // Customer Complaints
-  const [complaints, setComplaints] = useState(vehicleData?.complaints || []);
+  const [complaints, setComplaints] = useState(
+    vehicleData?.fkCustomerComplaintsDataId?.list || []
+  );
   const [complaintEdit, setComplaintEdit] = useState(null); // index or null
   const [complaintTitle, setComplaintTitle] = useState("");
   const [complaintDescription, setComplaintDescription] = useState("");
 
   // Mechanic Observations
   const [observations, setObservations] = useState(
-    vehicleData?.observations || []
+    vehicleData?.fkMechanicObservationsDataId?.list || []
   );
   const [observationEdit, setObservationEdit] = useState(null);
   const [observationTitle, setObservationTitle] = useState("");
   const [observationDescription, setObservationDescription] = useState("");
 
   // Parts & Accessories
-  const [parts, setParts] = useState(vehicleData?.parts || []);
+  const [parts, setParts] = useState(
+    vehicleData?.fkPartsAndAccessoriesDataId?.list || []
+  );
   const [partEdit, setPartEdit] = useState(null);
   const [partTitle, setPartTitle] = useState("");
   const [partDescription, setPartDescription] = useState("");
@@ -129,7 +134,11 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   // Staff Assignments (fetched from API)
   const [staffList, setStaffList] = useState([]);
   const [staffAssignments, setStaffAssignments] = useState(
-    vehicleData?.staffAssignments || []
+    serviceid
+      ? vehicleData?.fkAssignedStaffsDataId?.staffs?.map(
+          (x) => x?.fkStaffDataId?._id
+        )
+      : []
   );
 
   // Billing details (fetched and composed)
@@ -137,11 +146,57 @@ export default function EditService({ mode = "add", vehicleData = null }) {
     vehicleData?.labourCharges || 0
   );
   const [pickupCharges, setpickupCharges] = useState(
-    vehicleData?.pickupCharges || 0
+    serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+      serviceChargeDetails?.pickupServiceChargesData?.amountSummary?.length - 1
+    ].amount +
+      (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+        serviceChargeDetails?.pickupServiceChargesData?.amountSummary?.length -
+          1
+      ].amount *
+        (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+          serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+            ?.length - 1
+        ].cGST +
+          serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+              ?.length - 1
+          ].sGST)) /
+        100
   );
-  const [dropCharges, setdropCharges] = useState(vehicleData?.dropCharges || 0);
+  const [dropCharges, setdropCharges] = useState(
+    serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+      serviceChargeDetails?.dropServiceChargesData?.amountSummary?.length - 1
+    ].amount +
+      (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+        serviceChargeDetails?.dropServiceChargesData?.amountSummary?.length - 1
+      ].amount *
+        (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+          serviceChargeDetails?.dropServiceChargesData?.amountSummary?.length -
+            1
+        ].cGST +
+          serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+            serviceChargeDetails?.dropServiceChargesData?.amountSummary
+              ?.length - 1
+          ].sGST)) /
+        100
+  );
   const [washingCharges, setWashingCharges] = useState(
-    vehicleData?.washingCharges || 0
+    serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+      serviceChargeDetails?.washingServiceChargesData?.amountSummary?.length - 1
+    ].amount +
+      (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+        serviceChargeDetails?.washingServiceChargesData?.amountSummary?.length -
+          1
+      ].amount *
+        (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+          serviceChargeDetails?.washingServiceChargesData?.amountSummary
+            ?.length - 1
+        ].cGST +
+          serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+            serviceChargeDetails?.washingServiceChargesData?.amountSummary
+              ?.length - 1
+          ].sGST)) /
+        100
   );
 
   // Delivery & Next Service
@@ -496,7 +551,12 @@ export default function EditService({ mode = "add", vehicleData = null }) {
     .filter((svc) => svc?.isChecked === true)
     .reduce(
       (sum, svc) =>
-        sum + (svc?.amount + (svc?.amount * (svc?.cGST + svc?.sGST)) / 100),
+        sum +
+        (svc?.amountSummary[svc?.amountSummary.length - 1].amount +
+          (svc?.amountSummary[svc?.amountSummary.length - 1].amount *
+            (svc?.amountSummary[svc?.amountSummary.length - 1].cGST +
+              svc?.amountSummary[svc?.amountSummary.length - 1].sGST)) /
+            100),
       0
     );
 
@@ -590,82 +650,25 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   };
 
   //toggles
-  const [washingChargesCheck, setwashingChargesCheck] = useState(false);
+  const [washingChargesCheck, setwashingChargesCheck] = useState(
+    vehicleData?.fkBillingDataId?.washingServiceChargesData?.isChecked
+  );
   const toggleWashingCharges = () => {
     setwashingChargesCheck(!washingChargesCheck);
-    !washingChargesCheck
-      ? setWashingCharges(
-          serviceChargeDetails?.washingServiceChargesData?.amountSummary[
-            serviceChargeDetails?.washingServiceChargesData?.amountSummary
-              ?.length - 1
-          ].amount +
-            (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
-              serviceChargeDetails?.washingServiceChargesData?.amountSummary
-                ?.length - 1
-            ].amount *
-              (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
-                serviceChargeDetails?.washingServiceChargesData?.amountSummary
-                  ?.length - 1
-              ].cGST +
-                serviceChargeDetails?.washingServiceChargesData?.amountSummary[
-                  serviceChargeDetails?.washingServiceChargesData?.amountSummary
-                    ?.length - 1
-                ].sGST)) /
-              100
-        )
-      : setWashingCharges(0);
   };
   //pickuip
-  const [pickupChargesCheck, setpickupChargesCheck] = useState(false);
+  const [pickupChargesCheck, setpickupChargesCheck] = useState(
+    vehicleData?.fkBillingDataId?.pickupServiceChargesData?.isChecked
+  );
   const togglepickupCharges = () => {
     setpickupChargesCheck(!pickupChargesCheck);
-    !pickupChargesCheck
-      ? setpickupCharges(
-          serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
-              ?.length - 1
-          ].amount +
-            (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-              serviceChargeDetails?.pickupServiceChargesData?.amountSummary
-                ?.length - 1
-            ].amount *
-              (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-                serviceChargeDetails?.pickupServiceChargesData?.amountSummary
-                  ?.length - 1
-              ].cGST +
-                serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-                  serviceChargeDetails?.pickupServiceChargesData?.amountSummary
-                    ?.length - 1
-                ].sGST)) /
-              100
-        )
-      : setpickupCharges(0);
   };
   //drop
-  const [dropChargesCheck, setdropChargesCheck] = useState(false);
+  const [dropChargesCheck, setdropChargesCheck] = useState(
+    vehicleData?.fkBillingDataId?.dropServiceChargesData?.isChecked
+  );
   const toggleDropCharges = () => {
     setdropChargesCheck(!dropChargesCheck);
-    !dropChargesCheck
-      ? setdropCharges(
-          serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-            serviceChargeDetails?.dropServiceChargesData?.amountSummary
-              ?.length - 1
-          ].amount +
-            (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-              serviceChargeDetails?.dropServiceChargesData?.amountSummary
-                ?.length - 1
-            ].amount *
-              (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-                serviceChargeDetails?.dropServiceChargesData?.amountSummary
-                  ?.length - 1
-              ].cGST +
-                serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-                  serviceChargeDetails?.dropServiceChargesData?.amountSummary
-                    ?.length - 1
-                ].sGST)) /
-              100
-        )
-      : setdropCharges(0);
   };
   // --- Render ---
   return (
@@ -1340,8 +1343,15 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     <span className="ml-2">
                       {svc?.title} - ₹
                       <span className="font-bold text-blue-800">
-                        {svc?.amount +
-                          (svc?.amount * (svc?.cGST + svc?.sGST)) / 100}
+                        {svc?.amountSummary[svc?.amountSummary.length - 1]
+                          .amount +
+                          (svc?.amountSummary[svc?.amountSummary.length - 1]
+                            .amount *
+                            (svc?.amountSummary[svc?.amountSummary.length - 1]
+                              .cGST +
+                              svc?.amountSummary[svc?.amountSummary.length - 1]
+                                .sGST)) /
+                            100}
                       </span>
                     </span>
                   </label>
