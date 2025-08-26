@@ -137,14 +137,14 @@ const DataTable = ({ data, rowsPerPageOptions = [5, 10, 20] }) => {
                   <td className="px-4 py-3">
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        row.serviceStatus === "Completed"
+                        row?.serviceStatus === false
                           ? "bg-green-100 text-green-700"
                           : row.serviceStatus === "In Progress"
                           ? "bg-yellow-100 text-yellow-700"
                           : "bg-red-100 text-red-700"
                       }`}
                     >
-                      {row?.isLatestService ? "In Progress" : "Completed"}
+                      {row?.serviceStatus ? "In Progress" : "Completed"}
                     </span>
                   </td>
                   <td className="px-4 py-3 flex justify-center gap-2">
