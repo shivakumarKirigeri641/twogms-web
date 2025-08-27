@@ -52,17 +52,21 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   const allStaffsDetails = useSelector((store) => store.allStaffsDetails);
   const allVehicles = useSelector((store) => store.allVehicles);
   brandModelsList = allVehicles?.map((x) => x.fkTwoWheelerDataId?.variantName);
-  //console.log("brandlist", allVehicles);
   const serviceChargeDetails = useSelector(
     (store) => store.serviceChargeDetails
   );
-  //console.log(serviceChargeDetails?.standardServiceChargesData);
   useEffect(() => {
     if (!loginCredentials) {
       navigate("/twogms/login");
     }
     setStaffList(allStaffsDetails);
-    setStandardServices(serviceChargeDetails?.standardServiceChargesData?.list);
+    //setStandardServices(serviceChargeDetails?.standardServiceChargesData?.list);
+    setStandardServices(
+      vehicleData
+        ? vehicleData?.fkBillingDataId?.standardServiceChargesData
+            ?.standardServicesAppliedList
+        : serviceChargeDetails?.standardServiceChargesData?.list
+    );
   }, []);
   // mode = 'add' or 'edit'
   // vehicleData for 'edit' mode, nullable for 'add'
@@ -76,7 +80,9 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   const [vehicleNumber, setVehicleNumber] = useState(
     vehicleData?.fkVehicleDataId?.vehicleNumber || ""
   );
-  const [brandModel, setBrandModel] = useState(vehicleData?.brandModel || "");
+  const [brandModel, setBrandModel] = useState(
+    vehicleData?.fkVehicleDataId?.fkTwoWheelerDataId?.variantName || ""
+  );
   const [brandInputFocused, setBrandInputFocused] = useState(false);
   const [brandSuggestions, setBrandSuggestions] = useState([]);
   const [fuelAtService, setFuelAtService] = useState(
@@ -133,9 +139,8 @@ export default function EditService({ mode = "add", vehicleData = null }) {
 
   // Staff Assignments (fetched from API)
   const [staffList, setStaffList] = useState(
-    allStaffsDetails.map((x) => x.staffName)
+    allStaffsDetails?.map((x) => x.staffName)
   );
-  console.log("staffs assigned:", vehicleData?.fkAssignedStaffsDataId?.staffs);
   const [staffAssignments, setStaffAssignments] = useState(
     serviceid
       ? vehicleData?.fkAssignedStaffsDataId?.staffs?.map(
@@ -143,65 +148,226 @@ export default function EditService({ mode = "add", vehicleData = null }) {
         )
       : []
   );
-
   // Billing details (fetched and composed)
-  const [labourCharges, setLabourCharges] = useState(
-    vehicleData?.labourCharges || 0
+  //toggles
+  const [washingChargesCheck, setwashingChargesCheck] = useState(
+    vehicleData?.fkBillingDataId?.washingServiceChargesData?.isChecked
   );
-  const [pickupCharges, setpickupCharges] = useState(
-    serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-      serviceChargeDetails?.pickupServiceChargesData?.amountSummary?.length - 1
-    ].amount +
-      (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-        serviceChargeDetails?.pickupServiceChargesData?.amountSummary?.length -
-          1
-      ].amount *
-        (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-          serviceChargeDetails?.pickupServiceChargesData?.amountSummary
-            ?.length - 1
-        ].cGST +
-          serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
-            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
-              ?.length - 1
-          ].sGST)) /
-        100
-  );
-  const [dropCharges, setdropCharges] = useState(
-    serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-      serviceChargeDetails?.dropServiceChargesData?.amountSummary?.length - 1
-    ].amount +
-      (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-        serviceChargeDetails?.dropServiceChargesData?.amountSummary?.length - 1
-      ].amount *
-        (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-          serviceChargeDetails?.dropServiceChargesData?.amountSummary?.length -
-            1
-        ].cGST +
-          serviceChargeDetails?.dropServiceChargesData?.amountSummary[
-            serviceChargeDetails?.dropServiceChargesData?.amountSummary
-              ?.length - 1
-          ].sGST)) /
-        100
-  );
-  const [washingCharges, setWashingCharges] = useState(
-    serviceChargeDetails?.washingServiceChargesData?.amountSummary[
-      serviceChargeDetails?.washingServiceChargesData?.amountSummary?.length - 1
-    ].amount +
-      (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
-        serviceChargeDetails?.washingServiceChargesData?.amountSummary?.length -
-          1
-      ].amount *
-        (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
-          serviceChargeDetails?.washingServiceChargesData?.amountSummary
-            ?.length - 1
-        ].cGST +
-          serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+  const toggleWashingCharges = () => {
+    setwashingChargesCheck(!washingChargesCheck);
+    setWashingCharges(
+      !washingChargesCheck
+        ? serviceChargeDetails?.washingServiceChargesData?.amountSummary[
             serviceChargeDetails?.washingServiceChargesData?.amountSummary
               ?.length - 1
+          ].amount +
+            (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+              serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                ?.length - 1
+            ].amount *
+              (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+                serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].cGST +
+                serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+                  serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                    ?.length - 1
+                ].sGST)) /
+              100
+        : 0
+    );
+  };
+  //pickuip
+  const [pickupChargesCheck, setpickupChargesCheck] = useState(
+    vehicleData?.fkBillingDataId?.pickupServiceChargesData?.isChecked
+  );
+  const togglepickupCharges = () => {
+    setpickupChargesCheck(!pickupChargesCheck);
+    setpickupCharges(
+      !pickupChargesCheck
+        ? serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+            (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+              serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                ?.length - 1
+            ].amount *
+              (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+                serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].cGST +
+                serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+                  serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                    ?.length - 1
+                ].sGST)) /
+              100
+        : 0
+    );
+  };
+  //drop
+  const [dropChargesCheck, setdropChargesCheck] = useState(
+    vehicleData?.fkBillingDataId?.dropServiceChargesData?.isChecked
+  );
+  const toggleDropCharges = () => {
+    setdropChargesCheck(!dropChargesCheck);
+    setdropCharges(
+      !dropChargesCheck
+        ? serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+            serviceChargeDetails?.dropServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+            (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+              serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                ?.length - 1
+            ].amount *
+              (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+                serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].cGST +
+                serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+                  serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                    ?.length - 1
+                ].sGST)) /
+              100
+        : 0
+    );
+  };
+  const [labourCharges, setLabourCharges] = useState(
+    serviceChargeDetails?.labourServiceChargesData?.amountSummary[
+      serviceChargeDetails?.labourServiceChargesData?.amountSummary?.length - 1
+    ].amount +
+      (serviceChargeDetails?.labourServiceChargesData?.amountSummary[
+        serviceChargeDetails?.labourServiceChargesData?.amountSummary?.length -
+          1
+      ].amount *
+        (serviceChargeDetails?.labourServiceChargesData?.amountSummary[
+          serviceChargeDetails?.labourServiceChargesData?.amountSummary
+            ?.length - 1
+        ].cGST +
+          serviceChargeDetails?.labourServiceChargesData?.amountSummary[
+            serviceChargeDetails?.labourServiceChargesData?.amountSummary
+              ?.length - 1
           ].sGST)) /
         100
   );
-
+  const [pickupCharges, setpickupCharges] = useState(
+    vehicleData
+      ? vehicleData?.fkBillingDataId?.pickupServiceChargesData?.isChecked
+        ? serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+          (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount *
+            (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+              serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                ?.length - 1
+            ].cGST +
+              serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+                serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].sGST)) /
+            100
+        : 0
+      : serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+          serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+            ?.length - 1
+        ].amount +
+          (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+            serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount *
+            (serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+              serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                ?.length - 1
+            ].cGST +
+              serviceChargeDetails?.pickupServiceChargesData?.amountSummary[
+                serviceChargeDetails?.pickupServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].sGST)) /
+            100
+  );
+  const [dropCharges, setdropCharges] = useState(
+    vehicleData
+      ? vehicleData?.fkBillingDataId?.dropServiceChargesData?.isChecked
+        ? serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+            serviceChargeDetails?.dropServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+          (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+            serviceChargeDetails?.dropServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount *
+            (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+              serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                ?.length - 1
+            ].cGST +
+              serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+                serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].sGST)) /
+            100
+        : 0
+      : serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+          serviceChargeDetails?.dropServiceChargesData?.amountSummary?.length -
+            1
+        ].amount +
+          (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+            serviceChargeDetails?.dropServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount *
+            (serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+              serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                ?.length - 1
+            ].cGST +
+              serviceChargeDetails?.dropServiceChargesData?.amountSummary[
+                serviceChargeDetails?.dropServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].sGST)) /
+            100
+  );
+  const [washingCharges, setWashingCharges] = useState(
+    vehicleData
+      ? vehicleData?.fkBillingDataId?.washingServiceChargesData?.isChecked
+        ? serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+            serviceChargeDetails?.washingServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount +
+          (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+            serviceChargeDetails?.washingServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount *
+            (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+              serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                ?.length - 1
+            ].cGST +
+              serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+                serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].sGST)) /
+            100
+        : 0
+      : serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+          serviceChargeDetails?.washingServiceChargesData?.amountSummary
+            ?.length - 1
+        ].amount +
+          (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+            serviceChargeDetails?.washingServiceChargesData?.amountSummary
+              ?.length - 1
+          ].amount *
+            (serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+              serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                ?.length - 1
+            ].cGST +
+              serviceChargeDetails?.washingServiceChargesData?.amountSummary[
+                serviceChargeDetails?.washingServiceChargesData?.amountSummary
+                  ?.length - 1
+              ].sGST)) /
+            100
+  );
   // Delivery & Next Service
   const [deliveryDate, setDeliveryDate] = useState(
     vehicleData?.deliveryDate || vehicleInDate
@@ -543,23 +709,18 @@ export default function EditService({ mode = "add", vehicleData = null }) {
   );
   const partsTotalCGST = parts.reduce((sum, p) => sum + p.cGST, 0);
   const partsTotalSGST = parts.reduce((sum, p) => sum + p.sGST, 0);
-  const stdServiceAmount =
-    false === standardServices?.isBaseLineService
-      ? standardServices
-          .filter((svc) => svc?.isChecked === true)
-          .reduce(
-            (sum, svc) =>
-              sum +
-              (svc?.amountSummary[svc?.amountSummary.length - 1].amount +
-                (svc?.amountSummary[svc?.amountSummary.length - 1].amount *
-                  (svc?.amountSummary[svc?.amountSummary.length - 1].cGST +
-                    svc?.amountSummary[svc?.amountSummary.length - 1].sGST)) /
-                  100),
-            0
-          )
-      : standardServices
-          ?.filter((svc) => svc?.isChecked === true)
-          .reduce((sum, svc) => sum + svc?.amount, 0);
+  const stdServiceAmount = standardServices
+    ?.filter((svc) => svc?.isChecked === true)
+    .reduce(
+      (sum, svc) =>
+        sum +
+        (svc?.amountSummary[svc?.amountSummary.length - 1].amount +
+          (svc?.amountSummary[svc?.amountSummary.length - 1].amount *
+            (svc?.amountSummary[svc?.amountSummary.length - 1].cGST +
+              svc?.amountSummary[svc?.amountSummary.length - 1].sGST)) /
+            100),
+      0
+    );
 
   const billingTotal =
     partsTotalAmount +
@@ -634,7 +795,6 @@ export default function EditService({ mode = "add", vehicleData = null }) {
         const result = await axios.get(SERVER + "/twogms/search-vehicle/" + e, {
           withCredentials: true,
         });
-        console.log(result?.data?.data);
         if (result?.data?.data) {
           setCustomerName(result?.data?.data?.fkCustomerDataId?.customerName);
           setAltMobileNumber(
@@ -648,28 +808,6 @@ export default function EditService({ mode = "add", vehicleData = null }) {
         }
       } catch (err) {}
     }
-  };
-
-  //toggles
-  const [washingChargesCheck, setwashingChargesCheck] = useState(
-    vehicleData?.fkBillingDataId?.washingServiceChargesData?.isChecked
-  );
-  const toggleWashingCharges = () => {
-    setwashingChargesCheck(!washingChargesCheck);
-  };
-  //pickuip
-  const [pickupChargesCheck, setpickupChargesCheck] = useState(
-    vehicleData?.fkBillingDataId?.pickupServiceChargesData?.isChecked
-  );
-  const togglepickupCharges = () => {
-    setpickupChargesCheck(!pickupChargesCheck);
-  };
-  //drop
-  const [dropChargesCheck, setdropChargesCheck] = useState(
-    vehicleData?.fkBillingDataId?.dropServiceChargesData?.isChecked
-  );
-  const toggleDropCharges = () => {
-    setdropChargesCheck(!dropChargesCheck);
   };
   // --- Render ---
   return (
@@ -1338,18 +1476,22 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     <input
                       type="checkbox"
                       disabled={
-                        !standardServices?.isBaseLineService ||
-                        false === standardServices?.isBaseLineService
-                          ? false
-                          : true
+                        !vehicleData
+                          ? !standardServices?.isBaseLineService ||
+                            false === standardServices?.isBaseLineService
+                            ? false
+                            : true
+                          : false
                       }
                       //checked={selectedStdServices?.includes(svc?._id)}
                       //onChange={() => onToggleStdService(svc?._id, index)}
                       checked={
-                        !standardServices?.isBaseLineService ||
-                        false === standardServices?.isBaseLineService
-                          ? svc?.isChecked
-                          : true
+                        !vehicleData
+                          ? !standardServices?.isBaseLineService ||
+                            false === standardServices?.isBaseLineService
+                            ? svc?.isChecked
+                            : true
+                          : svc?.isChecked
                       }
                       onChange={() => onToggleStdService(svc?._id, index)}
                       className="form-checkbox h-5 w-5 text-indigo-600"
@@ -1357,26 +1499,15 @@ export default function EditService({ mode = "add", vehicleData = null }) {
                     <span className="ml-2">
                       {svc?.title} - ₹
                       <span className="font-bold text-blue-800">
-                        {false === standardServices?.isBaseLineService
-                          ? svc?.amountSummary[svc?.amountSummary.length - 1]
-                              .amount
-                          : svc?.amount +
-                            (false === standardServices?.isBaseLineService
-                              ? svc?.amountSummary[
-                                  svc?.amountSummary.length - 1
-                                ].amount
-                              : svc?.amount *
-                                (false === standardServices?.isBaseLineService
-                                  ? svc?.amountSummary[
-                                      svc?.amountSummary.length - 1
-                                    ].cGST
-                                  : svc?.cGST + false ===
-                                    standardServices?.isBaseLineService
-                                  ? svc?.amountSummary[
-                                      svc?.amountSummary.length - 1
-                                    ].sGST
-                                  : svc?.sGST)) /
-                              100}
+                        {svc?.amountSummary[svc?.amountSummary?.length - 1]
+                          .amount +
+                          (svc?.amountSummary[svc?.amountSummary?.length - 1]
+                            .amount *
+                            (svc?.amountSummary[svc?.amountSummary?.length - 1]
+                              .sGST +
+                              svc?.amountSummary[svc?.amountSummary?.length - 1]
+                                .cGST)) /
+                            100}
                       </span>
                     </span>
                   </label>
